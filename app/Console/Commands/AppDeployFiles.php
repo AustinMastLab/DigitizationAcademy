@@ -94,8 +94,10 @@ class AppDeployFiles extends Command
      */
     private function configureReplace($search): mixed
     {
-        if ($search === 'APP_ENV') {
-            return config(str_replace('_', '.', strtolower($search)));
+        if (str_starts_with($search, 'APP_')) {
+            $value = strtolower(str_replace('APP_', '', $search));
+
+            return config('app.'.$value);
         }
 
         return config('config.'.strtolower($search));
@@ -109,9 +111,8 @@ class AppDeployFiles extends Command
         $this->apps = collect([
             'APP_PATH',
             'APP_ENV',
-            'APP_DOMAIN',
+            'APP_TAG',
             'SERVER_USER',
-            'SUPERVISOR_GROUP',
         ]);
     }
 }

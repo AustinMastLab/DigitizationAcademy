@@ -19,9 +19,6 @@
  */
 
 return [
-    'app_path' => base_path(),
-    'app_domain' => env('APP_DOMAIN'),
-    'supervisor_group' => env('SUPERVISOR_GROUP'),
     'server_user' => env('SERVER_USER', 'ubuntu'),
     'course_image_dir' => 'course_image',
     'course_syllabus_dir' => 'course_syllabus',

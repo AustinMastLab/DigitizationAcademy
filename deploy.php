@@ -67,19 +67,19 @@ set('clear_paths', [
 ]);
 
 // Server Configurations
-// Production: main branch → /data/web/digitizationacademy
+// Production
 host('production')
     ->set('hostname', '3.142.169.134')
     ->set('deploy_path', '{{base_path}}/digitizationacademy')
     ->set('branch', 'main')
-    ->set('domain_name', 'digitizationacademy');
+    ->set('environment', 'production');
 
-// Development: development branch → /data/web/dev.digitizationacademy
+// Development
 host('development')
-    ->set('hostname', '3.142.169.134')
-    ->set('deploy_path', '{{base_path}}/dev.digitizationacademy')
+    ->set('hostname', '3.138.217.206')
+    ->set('deploy_path', '{{base_path}}/digitizationacademy')
     ->set('branch', 'development')
-    ->set('domain_name', 'dev-digitizationacademy');
+    ->set('environment', 'development');
 
 /*
  * DEPLOYMENT TASK SEQUENCE - CI/CD Implementation
@@ -118,14 +118,14 @@ task('deploy', [
     'artisan:event:cache',     // Cache event listeners
     'artisan:optimize',        // Run Laravel optimization
 
-    // Phase 6: OpCache Management (Production Only)
-    'opcache:reset-production', // Reset OpCache after deployment (production only)
+    // Phase 6: OpCache Management
+    'opcache:reset',
 
-    // Phase 7: Domain-Specific Supervisor Management
+    // Phase 7: Domain-Specific Supervisor Management and Horizon
     'supervisor:reload',               // Update configs only
-    'supervisor:restart-domain-safe',  // Restart domain-specific Horizon processes
+    'artisan:horizon:terminate',
 
-    // Phase 7: Finalization
+    // Phase 8: Finalization
     'set:permissions',         // Set proper file permissions
     'deploy:clear_paths',      // Remove unnecessary files/directories
     'deploy:publish',          // Switch to new release (atomic deployment)

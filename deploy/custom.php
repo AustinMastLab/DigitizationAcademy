@@ -78,34 +78,10 @@ task('artisan:sweetalert:publish', artisan('sweetalert:publish'));
  * Reload Supervisor configuration
  * Executes reread and update commands for Supervisor
  */
-/*
- * =============================================================================
- * DOMAIN-SPECIFIC SUPERVISOR PROCESS MANAGEMENT
- * =============================================================================
- */
-
 desc('Reload Supervisor configuration (config-only update)');
 task('supervisor:reload', function () {
     run('sudo supervisorctl reread');
     run('sudo supervisorctl update');
-});
-
-desc('Safely restart domain-specific supervisor processes (Horizon-only, no queue checks needed)');
-task('supervisor:restart-domain-safe', function () {
-    $domain = get('domain_name');
-
-    if (! $domain) {
-        throw new Exception('Domain name not configured for this host');
-    }
-
-    // For digitizationacademy, we only have Horizon processes and no beanstalkd queues
-    // Since Horizon handles its own graceful shutdowns, we can restart directly
-    writeln("🔄 Restarting {$domain} domain Horizon processes...");
-
-    // Restart only processes belonging to this domain (production:* or development:*)
-    run("sudo supervisorctl restart {$domain}:*");
-
-    writeln('✅ Domain-specific supervisor processes restarted successfully');
 });
 
 /*
@@ -202,11 +178,10 @@ task('opcache:reset', function () {
                 throw new Exception('OPCACHE_WEBHOOK_TOKEN not set');
             }
 
-            $hostname = currentHost()->get('hostname');
-            $currentPath = run('readlink {{deploy_path}}/current');
-            $appUrl = strpos($currentPath, 'dev.digitizationacademy') !== false
-                ? 'https://dev.digitizationacademy.org'
-                : 'https://digitizationacademy.org';
+            $environment = get('environment', 'production');  // default to production
+            $appUrl = $appUrl = ($environment === 'development' || str_contains($environment, 'dev'))
+                ? 'https://devopcache.biospex.org'
+                : 'https://opcache.biospex.org';
 
             $webhookUrl = "{$appUrl}/admin/opcache/reset/{$webhookToken}";
             $response = run("curl -X POST -H 'Content-Type: application/json' '{$webhookUrl}'");
@@ -222,20 +197,6 @@ task('opcache:reset', function () {
             writeln('⚠️  Deployment will continue without OpCache reset');
         }
     }
-});
-
-desc('Reset OpCache after deployment (Production Only)');
-task('opcache:reset-production', function () {
-    // Only execute on production host
-    $currentHost = currentHost()->get('alias');
-    if ($currentHost !== 'production') {
-        writeln('⏭️  Skipping OpCache reset (not production environment)');
-
-        return;
-    }
-
-    writeln('🔄 Resetting OpCache for production deployment...');
-    invoke('opcache:reset');
 });
 
 /**
@@ -256,6 +217,27 @@ task('clear:package-cache', function () {
     run('rm -rf storage/framework/cache/data/*');
 
     writeln('✅ Package discovery cache cleared');
+});
+
+desc('Ensure Supervisor log directory exists');
+task('supervisor:ensure-log-dir', function () {
+    $logDir = '/var/log/supervisor';
+    $appTag = get('app_tag', 'app');        // fallback if not set
+
+    // Create main log dir if missing
+    run("sudo mkdir -p {$logDir}");
+
+    // Create app-specific log dir (e.g. /var/log/supervisor/digacad)
+    $appLogDir = "{$logDir}/{$appTag}";
+    run("sudo mkdir -p {$appLogDir}");
+
+    // Optional: set sane permissions
+    run("sudo chown root:root {$logDir}");
+    run("sudo chmod 755 {$logDir}");
+    run("sudo chown ubuntu:ubuntu {$appLogDir}");   // or www-data:www-data
+    run("sudo chmod 755 {$appLogDir}");
+
+    writeln("Supervisor log directory ready: {$appLogDir}");
 });
 
 /**
