@@ -10,8 +10,6 @@
 .env
 .env.*
 .phpunit.result.cache
-Homestead.json
-Homestead.yaml
 auth.json
 npm-debug.log
 yarn-error.log
