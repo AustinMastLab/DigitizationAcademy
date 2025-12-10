@@ -26,6 +26,7 @@ class AppTest extends Command
 {
     /**
      * The name and signature of the console command.
+     * test
      *
      * @var string
      */
