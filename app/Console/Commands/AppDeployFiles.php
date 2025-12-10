@@ -87,6 +87,8 @@ class AppDeployFiles extends Command
                 exec("sed -i 's*$search*$replace*g' $file");
             });
         });
+
+        $this->createSupervisorDirectory();
     }
 
     /**
@@ -114,5 +116,19 @@ class AppDeployFiles extends Command
             'APP_TAG',
             'SERVER_USER',
         ]);
+    }
+
+    /**
+     * Create supervisor log directory for the application.
+     *
+     * Creates a subdirectory under /var/log/supervisor using the application tag
+     * from configuration. Uses sudo to ensure proper permissions.
+     */
+    private function createSupervisorDirectory(): void
+    {
+        $logDir = '/var/log/supervisor';
+        $appTag = config('app.tag');
+        $appLogDir = "{$logDir}/{$appTag}";
+        exec("sudo mkdir -p {$appLogDir}");
     }
 }
