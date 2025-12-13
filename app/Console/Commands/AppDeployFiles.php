@@ -65,27 +65,41 @@ class AppDeployFiles extends Command
 
     /**
      * Execute the console command.
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function handle()
     {
         $this->setAppsConfigs();
 
         $supFiles = File::files($this->resPath.'/supervisor');
-        $supTargets = collect($supFiles)->map(function ($file) {
-            $target = $this->supPath.'/'.$file->getBaseName();
-            if (File::exists($target)) {
-                File::delete($target);
-            }
-            File::copy($file->getPathname(), $target);
 
-            return $target;
-        });
+        collect($supFiles)->each(function ($file) {
+            $target = $this->supPath.'/'.$file->getBasename();
 
-        $this->apps->each(function ($search) use ($supTargets) {
-            $replace = $this->configureReplace($search);
-            $supTargets->each(function ($file) use ($search, $replace) {
-                exec("sed -i 's*$search*$replace*g' $file");
+            // 1) Read template
+            $content = File::get($file->getPathname());
+
+            // 2) Apply replacements in PHP (no sed -i)
+            $this->apps->each(function ($search) use (&$content) {
+                $replace = (string) $this->configureReplace($search);
+                $content = str_replace($search, $replace, $content);
             });
+
+            // 3) Atomic write: temp file -> move into place
+            $dir = dirname($target);
+            if (! File::isDirectory($dir)) {
+                File::makeDirectory($dir, 0755, true);
+            }
+
+            $tmp = $dir.'/.'.basename($target).'.tmp';
+
+            // LOCK_EX prevents two deploys overlapping writes
+            if (File::put($tmp, $content, true) === false) {
+                throw new \RuntimeException("Failed to write temp supervisor file: {$tmp}");
+            }
+
+            File::move($tmp, $target);
         });
 
         $this->createSupervisorDirectory();
