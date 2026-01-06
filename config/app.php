@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (c) 2022. Digitization Academy
  * idigacademy@gmail.com
@@ -55,6 +56,7 @@ return [
     */
     'path' => base_path(),
     'tag' => env('APP_TAG'),
+    'server_user' => env('APP_SERVER_USER'),
 
     /*
     |--------------------------------------------------------------------------

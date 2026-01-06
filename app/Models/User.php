@@ -20,8 +20,9 @@
 
 namespace App\Models;
 
-use App\Models\Traits\FixesHydration;
 use App\Notifications\VerifyEmailQueued;
+use App\Traits\ClearsResponseCache;
+use App\Traits\FixesHydration;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -30,11 +31,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
 
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
-    use FixesHydration, HasApiTokens, HasFactory, HasRoles, LadaCacheTrait, Notifiable;
+    use ClearsResponseCache, FixesHydration, HasApiTokens, HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.

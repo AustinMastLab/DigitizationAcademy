@@ -20,15 +20,15 @@
 
 namespace App\Models;
 
-use App\Models\Traits\FixesHydration;
-use App\Models\Traits\Presentable;
+use App\Traits\ClearsResponseCache;
+use App\Traits\FixesHydration;
+use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
 
 class Team extends Model
 {
-    use FixesHydration, HasFactory, LadaCacheTrait, Presentable;
+    use ClearsResponseCache, FixesHydration, HasFactory, Presentable;
 
     /**
      * The attributes that are mass assignable.

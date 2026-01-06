@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Traits\FixesHydration;
+use App\Traits\ClearsResponseCache;
+use App\Traits\FixesHydration;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
 
 class Asset extends Model
 {
-    use FixesHydration, HasFactory, LadaCacheTrait;
+    use ClearsResponseCache, FixesHydration, HasFactory;
 
     /**
      * The attributes that are mass assignable.

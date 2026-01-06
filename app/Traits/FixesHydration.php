@@ -1,6 +1,7 @@
 <?php
+
 /*
- * Copyright (C) 2022 - 2025, Digitization Academy
+ * Copyright (C) 2022 - 2026, Digitization Academy
  * idigacademy@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace App\Models\Traits;
+namespace App\Traits;
 
 trait FixesHydration
 {

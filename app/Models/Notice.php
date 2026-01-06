@@ -20,16 +20,16 @@
 
 namespace App\Models;
 
-use App\Models\Traits\FixesHydration;
+use App\Traits\ClearsResponseCache;
+use App\Traits\FixesHydration;
 use Illuminate\Database\Eloquent\Model;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
 
 /**
  * Class Notice
  */
 class Notice extends Model
 {
-    use FixesHydration, LadaCacheTrait;
+    use ClearsResponseCache, FixesHydration;
 
     /**
      * {@inheritDoc}
