@@ -57,6 +57,7 @@ return [
     'path' => base_path(),
     'tag' => env('APP_TAG'),
     'server_user' => env('APP_SERVER_USER'),
+    'opcache_webhook_token' => env('OPCACHE_WEBHOOK_TOKEN'),
 
     /*
     |--------------------------------------------------------------------------

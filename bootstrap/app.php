@@ -20,6 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'cacheResponse' => \Spatie\ResponseCache\Middlewares\CacheResponse::class,
             'doNotCacheResponse' => \Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            '/opcache/reset',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

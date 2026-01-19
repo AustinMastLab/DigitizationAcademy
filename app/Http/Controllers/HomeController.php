@@ -21,13 +21,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
-/**
- * Controller for handling home page functionality.
- *
- * This controller is responsible for rendering the main home page
- * of the application.
- */
 class HomeController extends Controller
 {
     /**
@@ -38,5 +34,28 @@ class HomeController extends Controller
     public function index(): Renderable
     {
         return view('home');
+    }
+
+    /**
+     * Reset the PHP OpCache.
+     */
+    public function resetOpCache(Request $request)
+    {
+        $token = $request->input('token');
+        $validToken = config('app.opcache_webhook_token');
+
+        if (empty($validToken) || $token !== $validToken) {
+            return Response::json(['message' => 'Unauthorized'], 403);
+        }
+
+        if (function_exists('opcache_reset')) {
+            if (opcache_reset()) {
+                return Response::json(['message' => 'OpCache reset successful'], 200);
+            }
+
+            return Response::json(['message' => 'OpCache reset failed'], 500);
+        }
+
+        return Response::json(['message' => 'OpCache not available'], 500);
     }
 }

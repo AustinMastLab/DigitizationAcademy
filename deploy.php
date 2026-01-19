@@ -42,7 +42,10 @@ set('remote_user', 'ubuntu');
 set('php_fpm_version', '8.3');
 set('ssh_multiplexing', true);
 set('writable_mode', 'chmod');
-set('keep_releases', 5);  // Keep only 3 recent releases
+set('keep_releases', 3);  // Keep only 3 recent releases
+
+// Use sudo for cleanup to prevent "Directory not empty" or permission errors
+set('cleanup_use_sudo', true);
 
 // Shared Files (persisted across deployments)
 set('shared_files', [
@@ -64,7 +67,12 @@ set('shared_dirs', [
 // Files/Directories to Remove After Deployment
 set('clear_paths', [
     'node_modules',     // Remove after CI artifacts are deployed
+    'deployment-package', // Remove any residual nesting dirs
 ]);
+
+// Determine if the local identity file exists (for manual deployments)
+$localKey = '/home/ubuntu/.ssh/biospexaws.pem';
+$hasLocalKey = file_exists($localKey);
 
 // Server Configurations
 // Production
@@ -72,14 +80,24 @@ host('production')
     ->set('hostname', '3.142.169.134')
     ->set('deploy_path', '{{base_path}}/digitizationacademy')
     ->set('branch', 'main')
-    ->set('environment', 'production');
+    ->set('environment', 'production')
+    ->set('app_tag', 'digacad');
+
+if ($hasLocalKey) {
+    host('production')->set('identity_file', $localKey);
+}
 
 // Development
 host('development')
     ->set('hostname', '3.138.217.206')
     ->set('deploy_path', '{{base_path}}/digitizationacademy')
     ->set('branch', 'development')
-    ->set('environment', 'development');
+    ->set('environment', 'development')
+    ->set('app_tag', 'digacad');
+
+if ($hasLocalKey) {
+    host('development')->set('identity_file', $localKey);
+}
 
 /*
  * DEPLOYMENT TASK SEQUENCE - CI/CD Implementation
@@ -91,18 +109,20 @@ desc('Deploys your project using CI/CD artifacts');
 task('deploy', [
     // Phase 1: Preparation
     'deploy:prepare',           // Create release directory and setup structure
-    'clear:package-cache',      // Clear package cache BEFORE composer operations
+
+    // Phase 1.5: Ensure .env from SSM is ready
+    'env:ssm',
 
     // Phase 2: Dependencies & Assets
-    'deploy:vendors',           // Use default Laravel recipe (now works with ext-intl)
-    'deploy:ci-artifacts',      // Download & extract pre-built assets from GitHub Actions
+    'deploy:vendors',          // Install PHP Composer dependencies safely
+    'deploy:ci-artifacts',     // Download & extract pre-built assets from GitHub Actions
 
     // Phase 3: Laravel Setup
     'artisan:storage:link',    // Create symbolic link for storage directory
+    'artisan:package:discover', // Run package discovery
     'artisan:horizon:publish', // Publish Laravel Horizon assets
     'artisan:sweetalert:publish', // Publish Sweet Alert assets
     'artisan:filament:assets',
-    'artisan:filament:optimize',   // Optimize Filament resources and assets
     'artisan:app:deploy-files', // Custom app deployment files
 
     // Phase 4: Database & Updates
@@ -117,18 +137,22 @@ task('deploy', [
     'artisan:view:cache',      // Cache Blade templates
     'artisan:event:cache',     // Cache event listeners
     'artisan:optimize',        // Run Laravel optimization
+    'artisan:filament:optimize',   // Optimize Filament resources and assets
 
-    // Phase 6: OpCache Management
-    'opcache:reset',
-
-    // Phase 7: Domain-Specific Supervisor Management and Horizon
-    'supervisor:reload',               // Update configs only
+    // Phase 7: Domain-Specific Supervisor Management
+    'supervisor:reload', // Update configs only
     'artisan:horizon:terminate',
+    'artisan:queue:restart',
 
     // Phase 8: Finalization
-    'set:permissions',         // Set proper file permissions
+    'set:permissions',
     'deploy:clear_paths',      // Remove unnecessary files/directories
-    'deploy:publish',          // Switch to new release (atomic deployment)
+    'deploy:publish',          // <--- SYMLINK SWITCHES HERE
+
+    // Phase 6: OpCache Management (Now moved after publish)
+    'opcache:reset',           // <--- NOW IT WILL FIND THE ROUTE
+
+    'deploy:verify-structure', // Verify flat structure post-deploy
 ]);
 
 // Hooks

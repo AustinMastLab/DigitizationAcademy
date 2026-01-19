@@ -35,8 +35,6 @@ namespace Deployer;
  * =============================================================================
  */
 
-use Exception;
-
 /**
  * Execute database update queries for the application
  * Changes to the release or current path and runs the update-queries artisan command
@@ -64,7 +62,7 @@ task('artisan:app:deploy-files', function () {
 desc('Setting permissions...');
 task('set:permissions', function () {
     run('sudo chown -R ubuntu.www-data {{deploy_path}}');
-    run('sudo truncate -s 0 {{release_or_current_path}}/storage/logs/laravel.log');
+    run('sudo truncate -s 0 {{release_or_current_path}}/storage/logs/*.log');
 });
 
 /**
@@ -97,24 +95,9 @@ task('deploy:ci-artifacts', function () {
     $githubSha = $_ENV['GITHUB_SHA'] ?? getenv('GITHUB_SHA') ?? '';
     $githubRepo = $_ENV['GITHUB_REPO'] ?? getenv('GITHUB_REPO') ?? 'iDigAcademy/DigitizationAcademy';
 
-    // Debug: Show available environment variables for troubleshooting
-    writeln('Debug: Checking environment variables...');
-    writeln('GITHUB_TOKEN present: '.(! empty($githubToken) ? 'YES' : 'NO'));
-    writeln('GITHUB_SHA present: '.(! empty($githubSha) ? 'YES' : 'NO'));
-    writeln('GITHUB_REPO: '.$githubRepo);
-
     // Validate required environment variables
     if (empty($githubToken) || empty($githubSha)) {
-        $envVars = array_keys($_ENV);
-        $relevantEnvVars = array_filter($envVars, function ($key) {
-            return strpos(strtoupper($key), 'GITHUB') !== false;
-        });
-
-        $errorMsg = "GITHUB_TOKEN and GITHUB_SHA environment variables are required.\n";
-        $errorMsg .= 'Available GitHub-related env vars: '.implode(', ', $relevantEnvVars)."\n";
-        $errorMsg .= 'All env vars count: '.count($envVars);
-
-        throw new \Exception($errorMsg);
+        throw new \Exception('GITHUB_TOKEN and GITHUB_SHA environment variables are required.');
     }
 
     // Artifact naming convention: digitizationacademy-{git-sha}
@@ -126,7 +109,6 @@ task('deploy:ci-artifacts', function () {
     $response = runLocally("curl -H 'Authorization: Bearer {$githubToken}' -H 'Accept: application/vnd.github.v3+json' '{$apiUrl}?name={$artifactName}&per_page=1'");
     $artifacts = json_decode($response, true);
 
-    // Validate artifact exists
     if (empty($artifacts['artifacts'])) {
         throw new \Exception("No CI artifact found with name: {$artifactName}");
     }
@@ -134,69 +116,85 @@ task('deploy:ci-artifacts', function () {
     $downloadUrl = $artifacts['artifacts'][0]['archive_download_url'];
     cd('{{release_or_current_path}}');
 
-    // Step 2: Download, extract, and deploy CI-built assets
+    // Step 2: Download and extract
     run("curl -L -H 'Authorization: Bearer {$githubToken}' -H 'Accept: application/vnd.github.v3+json' '{$downloadUrl}' -o artifact.zip");
-    run('unzip -o -q artifact.zip');       // Extract artifact quietly, overwrite existing files
+    run('unzip -o -q artifact.zip');
 
-    // Debug: Check what was actually extracted
-    writeln('Debug: Contents after extraction:');
-    run('ls -la');
+    // Step 3: Biospex-style Nesting Correction
+    $nestLevelCmd = run('find . -type d -name "deployment-package" -printf "%p\\n" | wc -l');
+    $nests = (int) trim($nestLevelCmd);
 
-    // Check if deployment-package directory exists, if not, assume files are in current directory
-    $deploymentPackageExists = run('[ -d "deployment-package" ] && echo "true" || echo "false"');
-    if (trim($deploymentPackageExists) === 'true') {
-        run('rsync -av deployment-package/ ./'); // Sync pre-built assets from deployment-package
-        run('rm -rf deployment-package'); // Clean up deployment-package directory
-    } else {
-        writeln('Debug: No deployment-package directory found, artifacts appear to be extracted directly');
+    if ($nests > 0) {
+        $innermost = run('find . -type d -name "deployment-package" | sort -r | head -1');
+        $innermost = trim($innermost);
+        if (! empty($innermost)) {
+            run("rsync -av '{$innermost}/' ./");
+            run('find . -type d -name "deployment-package" -exec rm -rf {} +');
+        }
     }
 
-    run('rm -f artifact.zip'); // Cleanup artifact file
-
-    writeln('✅ CI artifacts deployed successfully - No server-side building required!');
+    run('rm -f artifact.zip');
+    writeln('✅ CI artifacts deployed successfully (Flat structure ensured)');
 });
 
 /*
  * =============================================================================
- * OPCACHE MANAGEMENT
+ * OPCACHE & ENVIRONMENT MANAGEMENT
  * =============================================================================
  */
 
 desc('Reset OpCache after deployment');
 task('opcache:reset', function () {
-    // Method 1: Direct PHP CLI OpCache reset (try first)
-    try {
-        run('php {{release_or_current_path}}/artisan tinker --execute="if (function_exists(\'opcache_reset\')) { opcache_reset(); echo \'OpCache reset via CLI\'; } else { echo \'OpCache not available via CLI\'; }"');
-        writeln('✅ OpCache reset successful via CLI');
-    } catch (Exception $e) {
-        writeln('⚠️  CLI OpCache reset failed, trying webhook method...');
+    $token = $_ENV['OPCACHE_WEBHOOK_TOKEN'] ?? getenv('OPCACHE_WEBHOOK_TOKEN') ?? '';
 
-        // Method 2: Webhook-based OpCache reset (fallback)
-        try {
-            $webhookToken = $_ENV['OPCACHE_WEBHOOK_TOKEN'] ?? getenv('OPCACHE_WEBHOOK_TOKEN') ?? '';
-            if (empty($webhookToken)) {
-                throw new Exception('OPCACHE_WEBHOOK_TOKEN not set');
-            }
+    if (empty($token)) {
+        writeln('⚠️  Skipping OpCache reset: OPCACHE_WEBHOOK_TOKEN not set');
 
-            $environment = get('environment', 'production');  // default to production
-            $appUrl = $appUrl = ($environment === 'development' || str_contains($environment, 'dev'))
-                ? 'https://devopcache.biospex.org'
-                : 'https://opcache.biospex.org';
-
-            $webhookUrl = "{$appUrl}/admin/opcache/reset/{$webhookToken}";
-            $response = run("curl -X POST -H 'Content-Type: application/json' '{$webhookUrl}'");
-
-            writeln('✅ OpCache reset successful via webhook');
-            writeln('Response: '.$response);
-        } catch (Exception $webhookException) {
-            writeln('❌ Both CLI and webhook OpCache reset methods failed');
-            writeln('CLI Error: '.$e->getMessage());
-            writeln('Webhook Error: '.$webhookException->getMessage());
-
-            // Don't fail the deployment, just warn
-            writeln('⚠️  Deployment will continue without OpCache reset');
-        }
+        return;
     }
+
+    $environment = get('environment', 'production');
+    $domain = ($environment === 'production') ? 'digitizationacademy.org' : 'dev.digitizationacademy.org';
+
+    // Static URL
+    $url = "https://{$domain}/opcache/reset";
+
+    try {
+        writeln("Triggering OpCache reset via application route: {$url}");
+        // Send token as POST data
+        $response = run("curl -X POST -sL -k -d 'token={$token}' '{$url}'");
+
+        if (str_contains($response, 'successful')) {
+            writeln('✅ OpCache reset successful');
+        } else {
+            throw new \Exception("Response: {$response}");
+        }
+    } catch (\Exception $e) {
+        writeln('❌ OpCache reset failed: '.$e->getMessage());
+    }
+});
+
+desc('Generate .env from AWS SSM Parameter Store');
+task('env:ssm', function () {
+    $appName = 'digitizationacademy';
+    $environment = currentHost()->get('environment') ?? 'development';
+    $remoteUser = get('remote_user');
+    $homeDir = "/home/{$remoteUser}";
+
+    // Assumes the 'generate-env' script exists in the home directory on the server
+    $cmd = "cd {$homeDir} && ./generate-env {$appName} {$environment}";
+
+    writeln("Running: {$cmd}");
+    run($cmd);
+})->once();
+
+desc('Verify flat deployment structure');
+task('deploy:verify-structure', function () {
+    $nestCheck = run('find {{release_path}} -type d -name "deployment-package" | wc -l');
+    if ((int) trim($nestCheck) > 0) {
+        throw new \Exception("Nesting detected post-deploy: {$nestCheck} dirs. Check CI artifact.");
+    }
+    writeln('✅ Deployment structure verified: flat and clean');
 });
 
 /**
