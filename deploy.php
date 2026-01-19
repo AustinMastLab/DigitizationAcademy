@@ -33,7 +33,6 @@
 namespace Deployer;
 
 require 'recipe/laravel.php';
-require 'recipe/laravel.php';
 require 'deploy/custom.php';
 
 // Deployment Configuration
