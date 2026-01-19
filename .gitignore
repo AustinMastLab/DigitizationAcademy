@@ -30,3 +30,5 @@ _ide_helper.php
 /.junie/
 /.ai/
 /aws-compare/
+/push-env-params
+/remove-env-params

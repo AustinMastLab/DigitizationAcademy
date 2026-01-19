@@ -21,7 +21,6 @@
 namespace App\Models;
 
 use App\Traits\ClearsResponseCache;
-use App\Traits\FixesHydration;
 use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -49,7 +48,7 @@ use Str;
  */
 class Course extends Model
 {
-    use ClearsResponseCache, FixesHydration, HasFactory, Presentable;
+    use ClearsResponseCache, HasFactory, Presentable;
 
     /**
      * The relationships that should always be loaded.

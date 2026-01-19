@@ -21,7 +21,6 @@
 namespace App\Models;
 
 use App\Traits\ClearsResponseCache;
-use App\Traits\FixesHydration;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -29,7 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Notice extends Model
 {
-    use ClearsResponseCache, FixesHydration;
+    use ClearsResponseCache;
 
     /**
      * {@inheritDoc}

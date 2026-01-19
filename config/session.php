@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (c) 2022. Digitization Academy
  * idigacademy@gmail.com
@@ -35,7 +36,7 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'file'),
+    'driver' => env('SESSION_DRIVER', 'memcached'),
 
     /*
     |--------------------------------------------------------------------------
@@ -145,7 +146,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
+        Str::slug(config('app.name'), '_').'_session'
     ),
 
     /*

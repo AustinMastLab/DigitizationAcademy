@@ -22,7 +22,6 @@ namespace App\Models;
 
 use App\Notifications\VerifyEmailQueued;
 use App\Traits\ClearsResponseCache;
-use App\Traits\FixesHydration;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -34,7 +33,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
-    use ClearsResponseCache, FixesHydration, HasApiTokens, HasFactory, HasRoles, Notifiable;
+    use ClearsResponseCache, HasApiTokens, HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.

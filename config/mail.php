@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (c) 2022. Digitization Academy
  * idigacademy@gmail.com
@@ -53,17 +54,13 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-            'port' => env('MAIL_PORT', 587),
-            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            'host' => env('MAIL_HOST', '127.0.0.1'),
+            'port' => env('MAIL_PORT', 1025),
+            'encryption' => env('MAIL_ENCRYPTION', null),
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
-        ],
-
-        'ses' => [
-            'transport' => 'ses',
         ],
 
         'mailgun' => [
@@ -109,8 +106,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'idigacademy@gmail.com'),
+        'name' => env('MAIL_FROM_NAME', 'Digitization Academy'),
     ],
 
     /*

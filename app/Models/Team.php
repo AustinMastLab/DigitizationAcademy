@@ -21,14 +21,13 @@
 namespace App\Models;
 
 use App\Traits\ClearsResponseCache;
-use App\Traits\FixesHydration;
 use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Team extends Model
 {
-    use ClearsResponseCache, FixesHydration, HasFactory, Presentable;
+    use ClearsResponseCache, HasFactory, Presentable;
 
     /**
      * The attributes that are mass assignable.

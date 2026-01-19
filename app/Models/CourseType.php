@@ -21,7 +21,6 @@
 namespace App\Models;
 
 use App\Traits\ClearsResponseCache;
-use App\Traits\FixesHydration;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -39,7 +38,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class CourseType extends Model
 {
-    use ClearsResponseCache, FixesHydration, HasFactory;
+    use ClearsResponseCache, HasFactory;
 
     /**
      * The attributes that are mass assignable.

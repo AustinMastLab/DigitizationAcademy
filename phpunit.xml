@@ -6,10 +6,10 @@
 >
     <testsuites>
         <testsuite name="Unit">
-            <directory suffix="Test.php">./tests/Unit</directory>
+            <directory>./tests/Unit</directory>
         </testsuite>
         <testsuite name="Feature">
-            <directory suffix="Test.php">./tests/Feature</directory>
+            <directory>./tests/Feature</directory>
         </testsuite>
     </testsuites>
     <php>
@@ -22,6 +22,5 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
-        <env name="LADA_CACHE_ACTIVE" value="false"/>
     </php>
 </phpunit>

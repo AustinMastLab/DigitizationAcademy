@@ -33,7 +33,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'FSU Digitization Academy | Digital Biodiversity Specimens'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,8 +55,8 @@ return [
     |
     */
     'path' => base_path(),
-    'tag' => env('APP_TAG'),
-    'server_user' => env('APP_SERVER_USER'),
+    'tag' => env('APP_TAG', 'digitizationacademy'),
+    'server_user' => env('APP_SERVER_USER', 'ubuntu'),
     'opcache_webhook_token' => env('OPCACHE_WEBHOOK_TOKEN'),
 
     /*
