@@ -33,10 +33,11 @@
 namespace Deployer;
 
 require 'recipe/laravel.php';
+require 'recipe/laravel.php';
 require 'deploy/custom.php';
 
 // Deployment Configuration
-set('repository', 'https://github.com/iDigAcademy/DigitizationAcademy.git');
+set('repository', 'https://github.com/AustinMastLab/DigitizationAcademy.git');
 set('base_path', '/data/web');
 set('remote_user', 'ubuntu');
 set('php_fpm_version', '8.3');

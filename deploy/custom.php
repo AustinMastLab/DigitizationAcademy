@@ -93,7 +93,7 @@ task('deploy:ci-artifacts', function () {
     // Environment variables automatically provided by GitHub Actions workflow
     $githubToken = $_ENV['GITHUB_TOKEN'] ?? getenv('GITHUB_TOKEN') ?? '';
     $githubSha = $_ENV['GITHUB_SHA'] ?? getenv('GITHUB_SHA') ?? '';
-    $githubRepo = $_ENV['GITHUB_REPO'] ?? getenv('GITHUB_REPO') ?? 'iDigAcademy/DigitizationAcademy';
+    $githubRepo = $_ENV['GITHUB_REPO'] ?? getenv('GITHUB_REPO') ?? 'AustinMastLab/DigitizationAcademy';
 
     // Validate required environment variables
     if (empty($githubToken) || empty($githubSha)) {

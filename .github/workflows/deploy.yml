@@ -178,6 +178,7 @@ jobs:
       - name: Whitelist Runner IP in AWS Security Group
         run: |
           aws ec2 authorize-security-group-ingress \
+            --region ${{ secrets.AWS_REGION }} \
             --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} \
             --protocol tcp \
             --port 22 \
@@ -251,6 +252,7 @@ jobs:
         if: always()
         run: |
           aws ec2 revoke-security-group-ingress \
+            --region ${{ secrets.AWS_REGION }} \
             --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} \
             --protocol tcp \
             --port 22 \
@@ -274,6 +276,7 @@ jobs:
       - name: Whitelist Runner IP in AWS Security Group
         run: |
           aws ec2 authorize-security-group-ingress \
+            --region ${{ secrets.AWS_REGION }} \
             --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} \
             --protocol tcp \
             --port 22 \
@@ -314,7 +317,7 @@ jobs:
           rm -rf deployment-package || true
           # Create isolated temp dir
           TEMP_DIR=$(mktemp -d)
-          # Sync repo files to temp
+          # Sync repo files to temp (exclusions prevent bloat/self-ref)
           rsync -av \
             --exclude=node_modules \
             --exclude=.git \
@@ -323,9 +326,9 @@ jobs:
             --exclude=storage/logs \
             --exclude=vendor \
             . "$TEMP_DIR/"
-          # Copy assets into temp/public/
+          # Copy assets into temp/public/ (these are already built via npm run production)
           cp -r public/css public/js public/fonts public/images public/svg public/mix-manifest.json "$TEMP_DIR/public/" || true
-          # Move to package name
+          # Rename to package name
           mv "$TEMP_DIR" deployment-package
       - name: Upload deployment artifact
         uses: actions/upload-artifact@v4
@@ -346,6 +349,7 @@ jobs:
         if: always()
         run: |
           aws ec2 revoke-security-group-ingress \
+            --region ${{ secrets.AWS_REGION }} \
             --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} \
             --protocol tcp \
             --port 22 \
