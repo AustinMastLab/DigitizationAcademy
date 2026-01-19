@@ -56,6 +56,15 @@ task('artisan:app:deploy-files', function () {
 });
 
 /**
+ * Run Laravel package discovery
+ */
+desc('Run Laravel package discovery');
+task('artisan:package:discover', function () {
+    cd('{{release_or_current_path}}');
+    run('php artisan package:discover --ansi');
+});
+
+/**
  * Set proper file permissions for the application
  * Sets ownership to ubuntu:www-data and clears the Laravel log file
  */
