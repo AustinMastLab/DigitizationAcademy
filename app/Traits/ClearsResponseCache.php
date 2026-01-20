@@ -1,7 +1,8 @@
 <?php
+
 /*
- * Copyright (c) 2022. Digitization Academy
- * idigacademy@gmail.com
+ * Copyright (C) 2014 - 2025, Biospex
+ * biospex@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +18,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace App\Console;
+namespace App\Traits;
 
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Spatie\ResponseCache\Facades\ResponseCache;
 
-class Kernel extends ConsoleKernel
+trait ClearsResponseCache
 {
-    /**
-     * Define the application's command schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
-     */
-    protected function schedule(Schedule $schedule)
+    public static function bootClearsResponseCache()
     {
+        if (! config('responsecache.enabled')) {
+            return;
+        }
 
-    }
+        self::created(function () {
+            ResponseCache::clear();
+        });
 
-    /**
-     * Register the commands for the application.
-     *
-     * @return void
-     */
-    protected function commands()
-    {
-        $this->load(__DIR__.'/Commands');
+        self::updated(function () {
+            ResponseCache::clear();
+        });
 
-        require base_path('routes/console.php');
+        self::deleted(function () {
+            ResponseCache::clear();
+        });
     }
 }

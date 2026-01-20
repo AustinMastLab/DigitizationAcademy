@@ -20,12 +20,10 @@
 
 namespace Database\Factories;
 
+use App\Models\CourseType;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Str;
+use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Course>
- */
 class CourseFactory extends Factory
 {
     /**
@@ -40,17 +38,22 @@ class CourseFactory extends Factory
         return [
             'title' => $title,
             'slug' => Str::slug($title),
+            'course_type_id' => CourseType::factory(),
             'type' => $this->faker->randomElement(['2 Hour', '12 Hour']),
             'description' => $this->faker->text(500),
             'objectives' => $this->faker->text(810),
             'language' => $this->faker->randomElement(['English', 'Spanish', 'French']),
             'instructor' => $this->faker->name(),
-            'page_image' => $this->faker->image('public/storage/course_image', 468, 353, null, false),
-            'tile_image' => $this->faker->image('public/storage/course_image', 468, 100, null, false),
+            'page_image' => '0',
+            'tile_image' => '0',
             'syllabus' => $this->faker->url(),
             'video' => $this->faker->url(),
-            'active' => true,
-            'order' => $this->faker->numberBetween(0, 100),
+            'active' => $this->faker->boolean,
+            'order' => $this->faker->numberBetween(1, 100),
+            'expert_panel_headline' => $this->faker->sentence,
+            'expert_panel_copy' => $this->faker->paragraph,
+            'expert_panel_image' => '0',
+            'expert_panelist_copy' => $this->faker->paragraph,
         ];
     }
 }

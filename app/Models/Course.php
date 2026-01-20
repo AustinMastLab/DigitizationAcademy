@@ -20,13 +20,12 @@
 
 namespace App\Models;
 
-use App\Models\Traits\FixesHydration;
-use App\Models\Traits\Presentable;
+use App\Traits\ClearsResponseCache;
+use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
 use Str;
 
 /**
@@ -49,7 +48,7 @@ use Str;
  */
 class Course extends Model
 {
-    use FixesHydration, HasFactory, LadaCacheTrait, Presentable;
+    use ClearsResponseCache, HasFactory, Presentable;
 
     /**
      * The relationships that should always be loaded.

@@ -22,10 +22,17 @@ on:
       - development # Development environment
   release:
     types: [published] # Production deployment trigger
+
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   # Create release when pushing to main
   create-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     if: "github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '[skip deploy]') && !contains(github.event.head_commit.message, '[no deploy]')"
     outputs:
       release-tag: ${{ steps.create_release.outputs.tag_name }}
@@ -89,8 +96,9 @@ jobs:
               MINOR=${BASH_REMATCH[2]}
               PATCH=${BASH_REMATCH[3]}
             else
-              echo "Error: Could not parse version $CURRENT"
-              exit 1
+              MAJOR=0
+              MINOR=0
+              PATCH=0
             fi
 
             # Increment based on bump type
@@ -159,6 +167,22 @@ jobs:
     if: "github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '[skip deploy]') && !contains(github.event.head_commit.message, '[no deploy]')"
     steps:
       - uses: actions/checkout@v4
+      - name: Get Runner IP
+        id: ip
+        uses: haythem/public-ip@v1.3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::147899039648:role/GitHubActionsDeployRole
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Whitelist Runner IP in AWS Security Group
+        run: |
+          aws ec2 authorize-security-group-ingress \
+            --region ${{ secrets.AWS_REGION }} \
+            --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -191,9 +215,23 @@ jobs:
         run: npm run production
       - name: Create deployment package
         run: |
-          mkdir -p deployment-package
-          rsync -av --exclude=node_modules --exclude=.git --exclude=.github --exclude=tests --exclude=storage/logs --exclude=vendor . deployment-package/
-          cp -r public/css public/js public/fonts public/images public/svg public/mix-manifest.json deployment-package/public/ || true
+          # Clean any prior
+          rm -rf deployment-package || true
+          # Create isolated temp dir
+          TEMP_DIR=$(mktemp -d)
+          # Sync repo files to temp
+          rsync -av \
+            --exclude=node_modules \
+            --exclude=.git \
+            --exclude=.github \
+            --exclude=tests \
+            --exclude=storage/logs \
+            --exclude=vendor \
+            . "$TEMP_DIR/"
+          # Copy assets into temp/public/
+          cp -r public/css public/js public/fonts public/images public/svg public/mix-manifest.json "$TEMP_DIR/public/" || true
+          # Move to package name
+          mv "$TEMP_DIR" deployment-package
       - name: Upload deployment artifact
         uses: actions/upload-artifact@v4
         with:
@@ -210,6 +248,15 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
           GITHUB_REPO: ${{ github.repository }}
           OPCACHE_WEBHOOK_TOKEN: ${{ secrets.OPCACHE_WEBHOOK_TOKEN }}
+      - name: Revoke Runner IP from AWS Security Group
+        if: always()
+        run: |
+          aws ec2 revoke-security-group-ingress \
+            --region ${{ secrets.AWS_REGION }} \
+            --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
 
   build-and-deploy-development:
     runs-on: ubuntu-latest
@@ -218,6 +265,22 @@ jobs:
     if: "github.ref == 'refs/heads/development' && !contains(github.event.head_commit.message, '[skip deploy]') && !contains(github.event.head_commit.message, '[no deploy]')"
     steps:
       - uses: actions/checkout@v4
+      - name: Get Runner IP
+        id: ip
+        uses: haythem/public-ip@v1.3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::147899039648:role/GitHubActionsDeployRole
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Whitelist Runner IP in AWS Security Group
+        run: |
+          aws ec2 authorize-security-group-ingress \
+            --region ${{ secrets.AWS_REGION }} \
+            --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -250,9 +313,23 @@ jobs:
         run: npm run production
       - name: Create deployment package
         run: |
-          mkdir -p deployment-package
-          rsync -av --exclude=node_modules --exclude=.git --exclude=.github --exclude=tests --exclude=storage/logs --exclude=vendor . deployment-package/
-          cp -r public/css public/js public/fonts public/images public/svg public/mix-manifest.json deployment-package/public/ || true
+          # Clean any prior
+          rm -rf deployment-package || true
+          # Create isolated temp dir
+          TEMP_DIR=$(mktemp -d)
+          # Sync repo files to temp (exclusions prevent bloat/self-ref)
+          rsync -av \
+            --exclude=node_modules \
+            --exclude=.git \
+            --exclude=.github \
+            --exclude=tests \
+            --exclude=storage/logs \
+            --exclude=vendor \
+            . "$TEMP_DIR/"
+          # Copy assets into temp/public/ (these are already built via npm run production)
+          cp -r public/css public/js public/fonts public/images public/svg public/mix-manifest.json "$TEMP_DIR/public/" || true
+          # Rename to package name
+          mv "$TEMP_DIR" deployment-package
       - name: Upload deployment artifact
         uses: actions/upload-artifact@v4
         with:
@@ -268,3 +345,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_SHA: ${{ github.sha }}
           GITHUB_REPO: ${{ github.repository }}
+      - name: Revoke Runner IP from AWS Security Group
+        if: always()
+        run: |
+          aws ec2 revoke-security-group-ingress \
+            --region ${{ secrets.AWS_REGION }} \
+            --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32

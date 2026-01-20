@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2022. Digitization Academy
+ * Copyright (C) 2022 - 2026, Digitization Academy
  * idigacademy@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,14 +20,14 @@
 
 namespace App\Console\Commands;
 
-use File;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
-/**
- * Class AppFileDeployment
- */
 class AppDeployFiles extends Command
 {
     /**
@@ -35,7 +35,7 @@ class AppDeployFiles extends Command
      *
      * @var string
      */
-    protected $signature = 'app:deploy-files';
+    protected $signature = 'app:deploy-files {--dry-run : Show what would be done without making changes}';
 
     /**
      * The console command description.
@@ -44,74 +44,163 @@ class AppDeployFiles extends Command
      */
     protected $description = 'Handles moving, renaming, and replacing files needed per environment settings';
 
-    private string $resPath;
+    private Collection $replacements;
 
-    private string $supPath;
-
-    private Collection $apps;
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->resPath = base_path('resources');
-        $this->supPath = Storage::path('supervisor');
-    }
+    private bool $isDryRun = false;
 
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
-        $this->setAppsConfigs();
+        try {
+            $this->isDryRun = (bool) $this->option('dry-run');
 
-        $supFiles = File::files($this->resPath.'/supervisor');
-        $supTargets = collect($supFiles)->map(function ($file) {
-            $target = $this->supPath.'/'.$file->getBaseName();
-            if (File::exists($target)) {
-                File::delete($target);
+            if ($this->isDryRun) {
+                $this->warn('DRY RUN MODE: No files will be modified');
             }
-            File::copy($file->getPathname(), $target);
 
-            return $target;
-        });
+            $this->buildReplacementMap();
 
-        $this->apps->each(function ($search) use ($supTargets) {
-            $replace = $this->configureReplace($search);
-            $supTargets->each(function ($file) use ($search, $replace) {
-                exec("sed -i 's*$search*$replace*g' $file");
-            });
-        });
-    }
+            $sourceFiles = $this->getSourceFiles();
 
-    /**
-     * @return false|\Illuminate\Config\Repository|mixed|string
-     */
-    private function configureReplace($search): mixed
-    {
-        if ($search === 'APP_ENV') {
-            return config(str_replace('_', '.', strtolower($search)));
+            if ($sourceFiles->isEmpty()) {
+                $this->info('No supervisor templates found. Skipping.');
+
+                return CommandAlias::SUCCESS;
+            }
+
+            $this->processFiles($sourceFiles);
+            $this->createSupervisorDirectory();
+
+            $this->info('Deployment files processed successfully.');
+
+            return CommandAlias::SUCCESS;
+
+        } catch (Exception $e) {
+            $this->error("Deployment failed: {$e->getMessage()}");
+            Log::error('AppDeployFiles failed: '.$e->getMessage());
+
+            return CommandAlias::FAILURE;
         }
-
-        return config('config.'.strtolower($search));
     }
 
     /**
-     * Set search and replace arrays.
+     * Build the map of what strings to find and what to replace them with.
      */
-    private function setAppsConfigs()
+    private function buildReplacementMap(): void
     {
-        $this->apps = collect([
+        // Your current apps config keys
+        $keys = [
             'APP_PATH',
             'APP_ENV',
-            'APP_DOMAIN',
-            'SERVER_USER',
-            'SUPERVISOR_GROUP',
-        ]);
+            'APP_TAG',
+            'APP_SERVER_USER',
+        ];
+
+        $this->replacements = collect($keys)->mapWithKeys(function ($key) {
+            return [$key => $this->resolveConfigurationValue($key)];
+        });
+    }
+
+    /**
+     * Resolve the config value based on the key name.
+     */
+    private function resolveConfigurationValue(string $key): string
+    {
+        if (str_starts_with($key, 'APP_')) {
+            $configKey = strtolower(str_replace('APP_', '', $key));
+
+            return (string) config('app.'.$configKey);
+        }
+
+        return (string) config('config.'.strtolower($key));
+    }
+
+    /**
+     * Get templates from resources/supervisor.
+     */
+    private function getSourceFiles(): Collection
+    {
+        $path = base_path('resources/supervisor');
+
+        if (! File::isDirectory($path)) {
+            return collect();
+        }
+
+        return collect(File::files($path));
+    }
+
+    /**
+     * Loop through files and apply replacements.
+     */
+    private function processFiles(Collection $sourceFiles): void
+    {
+        $bar = $this->output->createProgressBar($sourceFiles->count());
+        $bar->start();
+
+        foreach ($sourceFiles as $file) {
+            $targetPath = Storage::path('supervisor/'.$file->getBasename());
+
+            $content = File::get($file->getPathname());
+
+            foreach ($this->replacements as $search => $replace) {
+                $content = str_replace($search, $replace, $content);
+            }
+
+            if (! $this->isDryRun) {
+                $this->ensureDirectoryExists(dirname($targetPath));
+                $this->atomicWrite($targetPath, $content);
+            } else {
+                $this->info("\n[Dry-run] Would write to: {$targetPath}");
+            }
+
+            $bar->advance();
+        }
+
+        $bar->finish();
+        $this->newLine();
+    }
+
+    /**
+     * Ensure the target directory exists.
+     */
+    private function ensureDirectoryExists(string $dir): void
+    {
+        if (! File::isDirectory($dir)) {
+            File::makeDirectory($dir, 0755, true);
+        }
+    }
+
+    /**
+     * Write file using a temp file to ensure atomicity.
+     */
+    private function atomicWrite(string $path, string $content): void
+    {
+        $tempPath = dirname($path).'/.'.basename($path).'.tmp';
+
+        if (File::put($tempPath, $content, true) === false) {
+            throw new Exception("Failed to write temp file: {$tempPath}");
+        }
+
+        File::move($tempPath, $path);
+    }
+
+    /**
+     * Create supervisor log directory for the application.
+     */
+    private function createSupervisorDirectory(): void
+    {
+        if ($this->isDryRun) {
+            $this->info('[Dry-run] Would create /var/log/supervisor directory');
+
+            return;
+        }
+
+        $appTag = config('app.tag');
+        if ($appTag) {
+            $appLogDir = "/var/log/supervisor/{$appTag}";
+            exec("sudo mkdir -p {$appLogDir}");
+        }
     }
 }

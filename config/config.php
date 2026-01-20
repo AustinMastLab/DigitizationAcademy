@@ -19,16 +19,13 @@
  */
 
 return [
-    'app_path' => base_path(),
-    'app_domain' => env('APP_DOMAIN'),
-    'supervisor_group' => env('SUPERVISOR_GROUP'),
     'server_user' => env('SERVER_USER', 'ubuntu'),
     'course_image_dir' => 'course_image',
     'course_syllabus_dir' => 'course_syllabus',
     'team_image_dir' => 'team_image',
     'idigbio_event_calendar' => env('IDIGBIO_EVENT_CALENDAR'),
-    'google_course_calender_id' => env('GOOGLE_COURSE_CALENDER_ID'),
-    'google_credential_file' => env('GOOGLE_CREDENTIAL_FILE'),
+    'google_course_calender_id' => env('GOOGLE_COURSE_CALENDER_ID', 'fb5fc3d0305f68b4df084c50b35cfbea445ce43202a6e4dc9ffaa5ee6d7bfd5e@group.calendar.google.com'),
+    'google_credential_file' => env('GOOGLE_CREDENTIAL_FILE', 'app/google-calendar/google-auth.json'),
 
     'course_type' => [
         '2_hour' => 1,

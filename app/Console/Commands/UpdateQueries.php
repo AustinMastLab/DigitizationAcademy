@@ -43,5 +43,10 @@ class UpdateQueries extends Command
      *
      * @throws \Throwable
      */
-    public function handle() {}
+    public function handle()
+    {
+        if (\Storage::exists('app/google-calendar/digitization-academy-b46a90f10ffb.json')) {
+            \Storage::delete('app/google-calendar/digitization-academy-b46a90f10ffb.json');
+        }
+    }
 }

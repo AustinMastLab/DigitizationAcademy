@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (c) 2022. Digitization Academy
  * idigacademy@gmail.com
@@ -49,8 +50,8 @@ return [
     ],
 
     'recaptcha' => [
+        'url' => 'https://www.google.com/recaptcha/api/siteverify',
         'site_key' => env('RECAPTCHA_SITE_KEY'),
         'secret_key' => env('RECAPTCHA_SECRET_KEY'),
-        'url' => env('RECAPTCHA_URL', 'https://www.google.com/recaptcha/api/siteverify')
     ],
 ];

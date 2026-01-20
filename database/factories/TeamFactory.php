@@ -21,7 +21,7 @@ class TeamFactory extends Factory
             'title' => $this->faker->jobTitle(),
             'email' => $this->faker->email(),
             'about' => $this->faker->realText(),
-            'image' => $this->faker->image('public/storage/team_image', 410, 410, null, false),
+            'image' => '0',
             'order' => 99,
         ];
     }

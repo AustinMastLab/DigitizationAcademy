@@ -22,7 +22,6 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CourseController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Cookie;
@@ -40,6 +39,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// OpCache Reset Route (Token passed in POST body)
+Route::post('/opcache/reset', [HomeController::class, 'resetOpCache'])->name('opcache.reset');
+
 Route::get('catalog', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('catalog/{type}', [CatalogController::class, 'show'])
     ->name('catalog.show')

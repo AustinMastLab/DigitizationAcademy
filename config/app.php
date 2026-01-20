@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (c) 2022. Digitization Academy
  * idigacademy@gmail.com
@@ -32,7 +33,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'FSU Digitization Academy | Digital Biodiversity Specimens'),
 
     /*
     |--------------------------------------------------------------------------
@@ -46,6 +47,17 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Application Environment
+    |--------------------------------------------------------------------------
+    |
+    */
+    'path' => base_path(),
+    'tag' => env('APP_TAG', 'digitizationacademy'),
+    'server_user' => env('APP_SERVER_USER', 'ubuntu'),
+    'opcache_webhook_token' => env('OPCACHE_WEBHOOK_TOKEN'),
 
     /*
     |--------------------------------------------------------------------------

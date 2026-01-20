@@ -29,6 +29,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('courses', function (Blueprint $table) {});
+        Schema::table('courses', function (Blueprint $table) {
+            $table->renameColumn('page_image', 'front_image');
+            $table->renameColumn('tile_image', 'back_image');
+            $table->dropColumn(['type', 'slug']);
+            $table->renameColumn('description', 'objectives');
+            $table->dropColumn(['objectives', 'instructor', 'sort_order', 'video', 'syllabus']);
+        });
     }
 };
