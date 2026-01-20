@@ -56,7 +56,7 @@ return [
 
     'prefix' => env(
         'HORIZON_PREFIX',
-        Str::slug(config('app.name', 'laravel'), '_').'_horizon:'
+        Str::slug(config('app.name', 'laravel').'_'.config('app.env'), '_').'_horizon:'
     ),
 
     /*
