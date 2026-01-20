@@ -125,7 +125,7 @@ return [
 
     'prefix' => env(
         'CACHE_PREFIX',
-        Str::slug(config('app.name', 'laravel').'_'.config('app.env'), '_').'_cache_'
+        Str::slug(config('app.tag', 'digitizationacademy').'_'.config('app.env'), '_').'_cache_'
     ),
 
 ];

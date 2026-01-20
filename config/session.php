@@ -146,7 +146,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        Str::slug(config('app.name', 'laravel').'_'.config('app.env'), '_').'_session'
+        Str::slug(config('app.tag', 'digitizationacademy').'_'.config('app.env'), '_').'_session'
     ),
 
     /*
