@@ -9,16 +9,32 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        <form method="post" action="{{ route('password.email') }}" class="recaptcha">
+
+                        <form method="post" action="{{ route('password.email') }}" class="recaptcha" novalidate>
                             @csrf
+
                             <div class="form-group mb-3">
-                                <label>Email</label>
-                                <input type="text" class="form-control" name="email">
+                                <label for="forgot-email">Email</label>
+                                <input
+                                        id="forgot-email"
+                                        type="email"
+                                        class="form-control"
+                                        name="email"
+                                        value="{{ old('email') }}"
+                                        autocomplete="email"
+                                        required
+                                >
                             </div>
+
                             @include('partials.recaptcha')
+
                             <div class="form-group">
-                                <button type="submit" class="digi-btn btn-fill-primary btn-fluid btn-primary secondary"
-                                        name="submit-btn">Send Password Reset Link
+                                <button
+                                        type="submit"
+                                        class="digi-btn btn-fill-primary btn-fluid btn-primary secondary"
+                                        name="submit-btn"
+                                >
+                                    Send Password Reset Link
                                 </button>
                             </div>
                         </form>
@@ -27,4 +43,4 @@
             </div>
         </div>
     </section>
-</x-app-layout>>
+</x-app-layout>

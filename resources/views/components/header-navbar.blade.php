@@ -20,7 +20,7 @@
                                 </div>
 
                                 <button class="mobile-menu-close" data-bs-dismiss="offcanvas"
-                                        aria-label="Mobil menu button" name="button"><i class="fas fa-times"></i>
+                                        aria-label="Mobile menu close" name="button" type="button"><i class="fas fa-times"></i>
                                 </button>
                             </div>
                         </div>
@@ -49,8 +49,12 @@
                         @role('Super Admin')
                             <!-- button associated with large screen aside -->
                             <li class="sidemenu-btn d-lg-block d-none">
-                                <button class="btn-wrap" data-bs-toggle="offcanvas"
-                                        data-bs-target="#offcanvasMenuRight">
+                                <button class="btn-wrap"
+                                        type="button"
+                                        data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasMenuRight"
+                                        aria-label="Open side menu"
+                                >
                                     <span></span>
                                     <span></span>
                                     <span></span>
@@ -58,7 +62,13 @@
                             </li>
                         @endrole
                         <li class="mobile-menu-btn sidemenu-btn d-lg-none d-block">
-                            <button class="btn-wrap" data-bs-toggle="offcanvas" data-bs-target="#mobilemenu-popup">
+                            <button
+                                class="btn-wrap"
+                                type="button"
+                                data-bs-toggle="offcanvas"
+                                data-bs-target="#mobilemenu-popup"
+                                aria-label="Open main menu"
+                            >
                                 <span></span>
                                 <span></span>
                                 <span></span>

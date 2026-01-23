@@ -500,17 +500,24 @@
         },
 
         courseCatalog: function () {
-            // Load initial "all
-            // " content when page loads
+            // Load initial content when page loads
             let initialUrl = $('#upcoming-tab').data('url');
             loadTabContent(initialUrl);
 
+            // Ensure initial ARIA labeling matches the initially active tab
+            $('#courseContent').attr('aria-labelledby', 'upcoming-tab');
+
             // Handle pill click events
-            $('.course-tab').on('click', function(e) {
+            $('.course-tab').on('click', function (e) {
                 e.preventDefault();
 
-                // Update active state (Bootstrap will handle this automatically)
-                // $(this).tab('show');
+                // Keep ARIA in sync with the selected tab (screen reader correctness)
+                const $tabs = $('.course-tab[role="tab"]');
+                $tabs.attr('aria-selected', 'false');
+                $(this).attr('aria-selected', 'true');
+
+                // This page uses one shared tabpanel; ensure it is labelled by the active tab
+                $('#courseContent').attr('aria-labelledby', this.id);
 
                 // Load content based on data-url attribute
                 let url = $(this).data('url');

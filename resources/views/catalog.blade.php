@@ -41,21 +41,21 @@
                         <button class="nav-link course-tab digi-btn btn-fill-primary secondary"
                                 id="all-tab" data-bs-toggle="pill"
                                 data-url="{{ route('catalog.show', ['type' => 'all']) }}" type="button" role="tab"
-                                aria-controls="all" aria-selected="true">All
+                                aria-controls="courseContent" aria-selected="false">All
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link course-tab digi-btn btn-fill-primary secondary active"
                                 id="upcoming-tab" data-bs-toggle="pill"
                                 data-url="{{ route('catalog.show', ['type' => 'upcoming']) }}" type="button" role="tab"
-                                aria-controls="upcoming" aria-selected="false">Upcoming
+                                aria-controls="courseContent" aria-selected="true">Upcoming
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link course-tab digi-btn btn-fill-primary secondary"
                                 id="past-tab" data-bs-toggle="pill"
                                 data-url="{{ route('catalog.show', ['type' => 'past']) }}" type="button" role="tab"
-                                aria-controls="past" aria-selected="false">Past
+                                aria-controls="courseContent" aria-selected="false">Past
                         </button>
                     </li>
                 </ul>

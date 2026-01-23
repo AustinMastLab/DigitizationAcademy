@@ -9,10 +9,13 @@
                                 A fresh verification link has been sent to your email address.
                             </div>
                         @endif
-                        Before proceeding, please check your email for a verification link.
-                        If you did not receive the email,
 
-                        <form method="post" action="{{ route('verification.send') }}" class="recaptcha">
+                        <p class="mb-3">
+                            Before proceeding, please check your email for a verification link.
+                            If you did not receive the email, you can request another one below.
+                        </p>
+
+                        <form method="post" action="{{ route('verification.send') }}" class="recaptcha" novalidate>
                             @csrf
                             @include('partials.recaptcha')
                             <div class="form-group">
@@ -30,4 +33,4 @@
             </div>
         </div>
     </section>
-</x-app-layout>>
+</x-app-layout>

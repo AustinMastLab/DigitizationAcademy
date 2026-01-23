@@ -4,23 +4,53 @@
             <div class="row">
                 <div class="col-md-6 offset-md-3 col-sm-12">
                     <div class="contact-form-box shadow-box mb--30 px-sm-4">
-                        <form method="post" action="{{ route('register') }}" class="recaptcha">
+                        <form method="post" action="{{ route('register') }}" class="recaptcha" novalidate>
                             @csrf
                             <div class="form-group mb-3">
-                                <label>Name</label>
-                                <input type="text" class="form-control" name="name">
+                                <label for="register-name">Name</label>
+                                <input
+                                        id="register-name"
+                                        type="text"
+                                        class="form-control"
+                                        name="name"
+                                        value="{{ old('name') }}"
+                                        autocomplete="name"
+                                        required
+                                >
                             </div>
                             <div class="form-group mb-3">
-                                <label>Email</label>
-                                <input type="text" class="form-control" name="email">
+                                <label for="register-email">Email</label>
+                                <input
+                                        id="register-email"
+                                        type="email"
+                                        class="form-control"
+                                        name="email"
+                                        value="{{ old('email') }}"
+                                        autocomplete="email"
+                                        required
+                                >
                             </div>
                             <div class="form-group mb-3">
-                                <label>Password</label>
-                                <input type="password" class="form-control" name="password">
+                                <label for="register-password">Password</label>
+                                <input
+                                        id="register-password"
+                                        type="password"
+                                        class="form-control"
+                                        name="password"
+                                        autocomplete="new-password"
+                                        required
+                                >
                             </div>
                             <div class="form-group mb-3">
-                                <label>Confirm Password</label>
-                                <input type="password" class="form-control" name="password_confirmation">
+                                <label for="register-password-confirmation">Confirm Password</label>
+                                <input
+                                        id="register-password-confirmation"
+                                        type="password"
+                                        class="form-control"
+                                        name="password_confirmation"
+                                        autocomplete="new-password"
+                                        required
+                                >
                             </div>
                             @include('partials.recaptcha')
                             <div class="form-group">

@@ -62,7 +62,7 @@ STYLESHEET INDEXING
     --color-blue-shade-2: #000248;
     --color-link: #373737;
     --color-fog: #DBDEFF;
-    --color-rose: #C75C6F;
+    --color-rose: #B84A5E;
     --color-body: #525260;
     --color-gray-1: #757589;
     --color-gray-2: #999FAE;
@@ -1532,6 +1532,24 @@ ul.course-objectives li{
 @media only screen and (max-width: 991px) {
     .breadcrumb .title {
         width: 100%; } }
+
+/* Course banner (dark background) breadcrumb contrast fix */
+.banner.course.bg-dark .breadcrumb li,
+.banner.course.bg-dark .breadcrumb li.active {
+    color: var(--color-white);
+}
+
+.banner.course.bg-dark .breadcrumb li a {
+    color: var(--color-white);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.banner.course.bg-dark .breadcrumb li a:hover,
+.banner.course.bg-dark .breadcrumb li a:focus {
+    color: var(--color-white);
+    text-decoration-thickness: 2px;
+}
 
 /*-------------------------
     Shapes

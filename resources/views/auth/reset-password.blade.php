@@ -4,19 +4,41 @@
             <div class="row">
                 <div class="col-md-6 offset-md-3 col-sm-12">
                     <div class="contact-form-box shadow-box mb--30 px-sm-4">
-                        <form method="post" action="{{ route('password.update') }}" class="recaptcha">
+                        <form method="post" action="{{ route('password.update') }}" class="recaptcha" novalidate>
                             @csrf
                             <div class="form-group mb-3">
-                                <label>Email</label>
-                                <input type="text" class="form-control" name="email">
+                                <label for="reset-email">Email</label>
+                                <input
+                                        id="reset-email"
+                                        type="email"
+                                        class="form-control"
+                                        name="email"
+                                        value="{{ old('email') }}"
+                                        autocomplete="email"
+                                        required
+                                >
                             </div>
                             <div class="form-group mb-3">
-                                <label>Password</label>
-                                <input type="password" class="form-control" name="password">
+                                <label for="reset-password">Password</label>
+                                <input
+                                        id="reset-password"
+                                        type="password"
+                                        class="form-control"
+                                        name="password"
+                                        autocomplete="new-password"
+                                        required
+                                >
                             </div>
                             <div class="form-group mb-3">
-                                <label>Confirm Password</label>
-                                <input type="password" class="form-control" name="password_confirmation">
+                                <label for="reset-password-confirmation">Confirm Password</label>
+                                <input
+                                        id="reset-password-confirmation"
+                                        type="password"
+                                        class="form-control"
+                                        name="password_confirmation"
+                                        autocomplete="new-password"
+                                        required
+                                >
                             </div>
                             @include('partials.recaptcha')
                             <div class="form-group">
