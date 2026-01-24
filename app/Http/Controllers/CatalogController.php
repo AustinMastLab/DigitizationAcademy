@@ -56,6 +56,6 @@ class CatalogController extends Controller
 
         $events = $service->showCatalogCourses($type);
 
-        return view('partials.catalog-events', compact('events'));
+        return view('partials.catalog-events', compact('events', 'type'));
     }
 }

@@ -63,6 +63,7 @@ STYLESHEET INDEXING
     --color-link: #373737;
     --color-fog: #DBDEFF;
     --color-rose: #B84A5E;
+    --color-rose-on-dark: #F4B6C2;
     --color-body: #525260;
     --color-gray-1: #757589;
     --color-gray-2: #999FAE;
@@ -275,6 +276,16 @@ li {
     color: var(--color-rose) !important;
 }
 
+/* Increase contrast for rose text shown on dark backgrounds (e.g. event tiles) */
+.bg-dark .text-rose {
+    color: var(--color-rose-on-dark) !important;
+}
+
+/* Same idea for the catalog “Start Date / End Date / …” labels that are also rose */
+.bg-dark .course-dates ul li span {
+    color: var(--color-rose-on-dark);
+}
+
 /*-------------------------
     Button
 -------------------------*/
@@ -467,7 +478,7 @@ li {
     .mainmenu > li {
         margin: 0 12px; } }
 .mainmenu > li > a {
-    color: var(--color-body);
+    color: var(--color-ship-gray);
     font-weight: 500;
     font-size: var(--font-body-2);
     font-family: var(--font-primary);
@@ -533,7 +544,7 @@ li {
 .mainmenu > .menu-item-has-children .digi-submenu li a {
     position: relative;
     font-size: 14px;
-    color: var(--color-body);
+    color: var(--color-ship-gray);
     font-weight: 500;
     padding: 7px 15px;
     border-radius: 4px;
@@ -1821,3 +1832,51 @@ ul.course-objectives li{
     color: var(--color-gray-1); }
 .footer-bottom-link ul li a:hover {
     color: var(--color-link); }
+
+
+
+/* ... existing code ... */
+
+.header-offcanvasmenu .offcanvas-body .main-navigation li a {
+    color: var(--color-dark);
+    font-size: 36px;
+    font-weight: 500;
+}
+
+/* Make the Logout <button> match the <a> links */
+.header-offcanvasmenu .offcanvas-body .main-navigation li form {
+    margin: 0;
+}
+
+.header-offcanvasmenu .offcanvas-body .main-navigation li .main-navigation-button {
+    display: inline-block;
+    background: transparent;
+    border: 0;
+    padding: 0;
+
+    color: var(--color-dark) !important;
+    font-size: 36px !important;
+    font-weight: 500 !important;
+    font-family: inherit;
+    line-height: normal;
+
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+@media only screen and (max-width: 1199px) {
+    .header-offcanvasmenu .offcanvas-body .main-navigation li .main-navigation-button {
+        font-size: 24px !important;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .header-offcanvasmenu .offcanvas-body .main-navigation li .main-navigation-button {
+        font-size: 20px !important;
+    }
+}
+
+.header-offcanvasmenu .offcanvas-body .main-navigation li .main-navigation-button:hover {
+    color: var(--color-primary) !important;
+}

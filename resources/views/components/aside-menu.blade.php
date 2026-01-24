@@ -8,10 +8,16 @@
                 <ul class="main-navigation list-unstyled">
                     <li><a href="/admin" id="admin">Admin</a></li>
                     <li><a href="{{ route('horizon.index') }}" target="_blank" id="horizon">Horizon</a></li>
-                    <li><a href="{{ route('logout') }}" id="logout">Logout</a></li>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                        @csrf
-                    </form>
+
+                    <li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" id="logout" class="main-navigation-button">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+
                     @guest
                         <li><a href="{{ route('login') }}">Login</a></li>
                         @if(\Laravel\Fortify\Features::enabled('register'))
