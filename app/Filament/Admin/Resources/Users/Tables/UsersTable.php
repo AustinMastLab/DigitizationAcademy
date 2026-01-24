@@ -30,7 +30,7 @@ class UsersTable
                     ->label('Roles')
                     ->colors([
                         'success' => 'Super Admin',
-                        'primary' => 'Member',
+                        'primary' => 'Staff',
                     ])
                     ->separator(','),
                 IconColumn::make('email_verified_at')

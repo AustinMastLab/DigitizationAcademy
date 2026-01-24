@@ -9,7 +9,8 @@
         "prod": "npm run production",
         "production": "mix --production",
         "postinstall": "yarn cache clean",
-        "a11y": "pa11y-ci"
+        "a11y": "pa11y-ci",
+        "a11y:json": "pa11y-ci --reporter json > pa11y-report.json"
     },
     "devDependencies": {
         "axios": "1.13.2",

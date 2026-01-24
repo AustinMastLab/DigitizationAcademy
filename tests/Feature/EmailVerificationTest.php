@@ -42,7 +42,7 @@ it('can verify email', function () {
     return ! Features::enabled(Features::emailVerification());
 }, 'Email verification not enabled.');
 
-it('can not verify email with invalid hash', function () {
+it('can verify email with invalid hash', function () {
     $user = User::factory()->create([
         'email_verified_at' => null,
     ]);
@@ -56,6 +56,44 @@ it('can not verify email with invalid hash', function () {
     $this->actingAs($user->fresh())->get($verificationUrl);
 
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
+})->skip(function () {
+    return ! Features::enabled(Features::emailVerification());
+}, 'Email verification not enabled.');
+
+it('can resend email verification notification', function () {
+    Notification::fake();
+
+    $user = User::factory()->create([
+        'email_verified_at' => null,
+    ]);
+
+    $honeypotFields = getHoneypotFields('/email/verify', $user);
+    $this->travel(config('honeypot.amount_of_seconds') + 1)->seconds();
+
+    $response = $this->actingAs($user)->from('/email/verify')->post('/email/verification-notification', $honeypotFields);
+
+    Notification::assertSentTo($user, App\Notifications\VerifyEmailQueued::class);
+    $response->assertRedirect('/email/verify');
+})->skip(function () {
+    return ! Features::enabled(Features::emailVerification());
+}, 'Email verification not enabled.');
+
+it('cannot resend email verification notification if honeypot is tripped', function () {
+    Notification::fake();
+
+    $user = User::factory()->create([
+        'email_verified_at' => null,
+    ]);
+
+    $honeypotFields = getHoneypotFields('/email/verify');
+    $randomFieldName = array_key_first($honeypotFields);
+    $honeypotFields[$randomFieldName] = 'spam';
+    $this->travel(config('honeypot.amount_of_seconds') + 1)->seconds();
+
+    $response = $this->actingAs($user)->post('/email/verification-notification', $honeypotFields);
+
+    Notification::assertNotSentTo($user, Illuminate\Auth\Notifications\VerifyEmail::class);
+    $response->assertSessionHasErrors(['contact']);
 })->skip(function () {
     return ! Features::enabled(Features::emailVerification());
 }, 'Email verification not enabled.');

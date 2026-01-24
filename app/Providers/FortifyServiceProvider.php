@@ -25,7 +25,6 @@ use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
-use App\Rules\ReCaptcha;
 use Hash;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -70,24 +69,23 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.reset-password', ['request' => $request]);
         });
 
+        Fortify::confirmPasswordView(function () {
+            return view('auth.passwords.confirm');
+        });
+
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         Fortify::authenticateUsing(function (Request $request) {
-            $validate = $request->validate(['g-recaptcha-response' => ['required', new ReCaptcha]]);
+            $user = User::where('email', $request->email)->first();
 
-            if (! $validate) {
-                return $validate;
-            } else {
-                $user = User::where('email', $request->email)->first();
-
-                if ($user &&
-                    Hash::check($request->password, $user->password)) {
-                    return $user;
-                }
+            if ($user && Hash::check($request->password, $user->password)) {
+                return $user;
             }
+
+            return null;
         });
 
         RateLimiter::for('login', function (Request $request) {

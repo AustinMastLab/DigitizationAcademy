@@ -20,15 +20,57 @@ it('cannot rendered registration screen if support is disabled', function () {
 }, 'Registration support is enabled.');
 
 it('can register new users', function () {
-    $response = $this->post('/register', [
+    \Spatie\Permission\Models\Role::create(['name' => 'Staff']);
+
+    $honeypotFields = getHoneypotFields('/register');
+
+    $this->travel(config('honeypot.amount_of_seconds') + 1)->seconds();
+
+    $response = $this->post('/register', array_merge([
         'name' => 'Test User',
         'email' => 'test@example.com',
         'password' => 'password',
         'password_confirmation' => 'password',
-    ]);
+    ], $honeypotFields));
 
     $this->assertAuthenticated();
     $response->assertRedirect(RouteServiceProvider::HOME);
+})->skip(function () {
+    return ! Features::enabled(Features::registration());
+}, 'Registration support is not enabled.');
+
+it('cannot register users if honeypot is tripped', function () {
+    $honeypotFields = getHoneypotFields('/register');
+    $randomFieldName = array_key_first($honeypotFields);
+    $honeypotFields[$randomFieldName] = 'spam';
+
+    $this->travel(config('honeypot.amount_of_seconds') + 1)->seconds();
+
+    $response = $this->post('/register', array_merge([
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ], $honeypotFields));
+
+    $this->assertGuest();
+    $response->assertSessionHasErrors(['contact']);
+})->skip(function () {
+    return ! Features::enabled(Features::registration());
+}, 'Registration support is not enabled.');
+
+it('cannot register users if submitted too fast', function () {
+    $honeypotFields = getHoneypotFields('/register');
+
+    $response = $this->post('/register', array_merge([
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ], $honeypotFields));
+
+    $this->assertGuest();
+    $response->assertSessionHasErrors(['contact']);
 })->skip(function () {
     return ! Features::enabled(Features::registration());
 }, 'Registration support is not enabled.');

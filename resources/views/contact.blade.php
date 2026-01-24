@@ -47,9 +47,9 @@
                             </div>
                         @endif
 
-                        <form method="post" action="{{ route('contact.store') }}" class="recaptcha" novalidate>
+                        <form method="post" action="{{ route('contact.store') }}" novalidate>
                             @csrf
-
+                            @honeypot
                             <div class="form-group mb-3">
                                 <label for="contact-name">Name</label>
                                 <input
@@ -88,9 +88,6 @@
                                         required
                                 >{{ old('message') }}</textarea>
                             </div>
-
-                            @include('partials.recaptcha')
-
                             <div class="form-group">
                                 <button
                                         type="submit"

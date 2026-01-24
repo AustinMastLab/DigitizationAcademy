@@ -25,10 +25,7 @@ use App\Models\Event;
 use App\Models\Notice;
 use App\Models\Team;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\ResponseCache\Facades\ResponseCache;
-
-uses(RefreshDatabase::class);
 
 beforeEach(function () {
     config(['responsecache.enabled' => true]);

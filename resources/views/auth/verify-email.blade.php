@@ -15,9 +15,9 @@
                             If you did not receive the email, you can request another one below.
                         </p>
 
-                        <form method="post" action="{{ route('verification.send') }}" class="recaptcha" novalidate>
+                        <form method="post" action="{{ route('verification.send') }}" novalidate>
                             @csrf
-                            @include('partials.recaptcha')
+                            @honeypot
                             <div class="form-group">
                                 <button type="submit" class="digi-btn btn-fill-primary btn-fluid btn-primary secondary"
                                         name="submit-btn">Click here to request another

@@ -10,9 +10,9 @@
                             </div>
                         @endif
 
-                        <form method="post" action="{{ route('password.email') }}" class="recaptcha" novalidate>
+                        <form method="post" action="{{ route('password.email') }}" novalidate>
                             @csrf
-
+                            @honeypot
                             <div class="form-group mb-3">
                                 <label for="forgot-email">Email</label>
                                 <input
@@ -25,9 +25,6 @@
                                         required
                                 >
                             </div>
-
-                            @include('partials.recaptcha')
-
                             <div class="form-group">
                                 <button
                                         type="submit"

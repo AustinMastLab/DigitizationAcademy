@@ -24,7 +24,7 @@
         gtag('config', 'G-XBKJG01XTP');
     </script>
 </head>
-<body class="sticky-header">
+<body id="main-wrapper" class="sticky-header">
 <!-- BACK TO TOP -->
 <a href="#main-wrapper" id="backto-top" class="back-to-top" type="button" aria-label="back to top">
     <i class="far fa-angle-double-up"></i></a>

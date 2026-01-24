@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (c) 2022. Digitization Academy
  * idigacademy@gmail.com
@@ -20,7 +21,6 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
-use App\Rules\ReCaptcha;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -33,7 +33,6 @@ class CreateNewUser implements CreatesNewUsers
     /**
      * Validate and create a newly registered user.
      *
-     * @param  array  $input
      * @return \App\Models\User
      */
     public function create(array $input)
@@ -48,7 +47,6 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
-            'g-recaptcha-response' => ['required', new ReCaptcha],
         ])->validate();
 
         $user = User::create([
@@ -57,7 +55,7 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
 
-        $user->assignRole('Member');
+        $user->assignRole('Staff');
 
         return $user;
     }

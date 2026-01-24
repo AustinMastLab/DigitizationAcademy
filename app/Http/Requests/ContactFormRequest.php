@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (c) 2022. Digitization Academy
  * idigacademy@gmail.com
@@ -19,7 +20,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ReCaptcha;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ContactFormRequest extends FormRequest
@@ -47,10 +47,9 @@ class ContactFormRequest extends FormRequest
                 'required',
                 'string',
                 'email',
-                'max:255'
+                'max:255',
             ],
             'message' => ['required', 'string'],
-            'g-recaptcha-response' => ['required', new ReCaptcha],
         ];
     }
 }

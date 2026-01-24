@@ -266,7 +266,6 @@
         menuLinkActive: function () {
             let currentPage = location.pathname.split("/"),
                 current = currentPage[currentPage.length - 1];
-            console.log(current);
 
             $('.mainmenu li a, .main-navigation li a').each(function () {
                 let $this = $(this);

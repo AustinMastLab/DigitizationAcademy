@@ -26,6 +26,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
+use Spatie\Honeypot\ProtectAgainstSpam;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +52,8 @@ Route::get('course/{slug}', CourseController::class)->name('course.index');
 Route::get('calendar', CalendarController::class)->name('calendar.index');
 Route::get('team', TeamController::class)->name('team.index');
 Route::get('contact', [ContactController::class, 'index'])->name('contact.index');
-Route::post('contact', [ContactController::class, 'store'])->name('contact.store');
+Route::post('contact', [ContactController::class, 'store'])
+    ->middleware(ProtectAgainstSpam::class)->name('contact.store');
 Route::get('/register-retry', function () {
     // Chrome F12 Headers - my_first_application_session=eyJpdiI6ImNnRH...
     $all_cookies = Cookie::get();

@@ -6,8 +6,9 @@
                     <div class="contact-form-box shadow-box mb--30 px-sm-4">
                         Please confirm your password before continuing.
 
-                        <form action="{{ route('password.confirm') }}" class="recaptcha">
+                        <form method="POST" action="{{ route('password.confirm') }}">
                             @csrf
+                            @honeypot
                             <div class="row mb-3">
                                 <div class="form-group mb-3">
                                     <label>Password</label>
@@ -22,7 +23,6 @@
                                     </span>
                                     @enderror
                                 </div>
-                                @include('partials.recaptcha')
                                 <div class="form-group">
                                     <button type="submit" class="digi-btn btn-fill-primary btn-fluid btn-primary secondary"
                                             name="submit-btn">Confirm Password

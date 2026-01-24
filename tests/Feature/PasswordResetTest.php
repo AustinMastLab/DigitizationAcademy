@@ -18,11 +18,34 @@ it('can request reset password link', function () {
 
     $user = User::factory()->create();
 
-    $response = $this->post('/forgot-password', [
+    $honeypotFields = getHoneypotFields('/forgot-password');
+    $this->travel(config('honeypot.amount_of_seconds') + 1)->seconds();
+
+    $response = $this->post('/forgot-password', array_merge([
         'email' => $user->email,
-    ]);
+    ], $honeypotFields));
 
     Notification::assertSentTo($user, ResetPassword::class);
+})->skip(function () {
+    return ! Features::enabled(Features::resetPasswords());
+}, 'Password updates are not enabled.');
+
+it('cannot request reset password link if honeypot is tripped', function () {
+    Notification::fake();
+
+    $user = User::factory()->create();
+
+    $honeypotFields = getHoneypotFields('/forgot-password');
+    $randomFieldName = array_key_first($honeypotFields);
+    $honeypotFields[$randomFieldName] = 'spam';
+    $this->travel(config('honeypot.amount_of_seconds') + 1)->seconds();
+
+    $response = $this->post('/forgot-password', array_merge([
+        'email' => $user->email,
+    ], $honeypotFields));
+
+    Notification::assertNotSentTo($user, ResetPassword::class);
+    $response->assertSessionHasErrors(['contact']);
 })->skip(function () {
     return ! Features::enabled(Features::resetPasswords());
 }, 'Password updates are not enabled.');
@@ -32,9 +55,12 @@ it('can render reset password screen', function () {
 
     $user = User::factory()->create();
 
-    $response = $this->post('/forgot-password', [
+    $honeypotFields = getHoneypotFields('/forgot-password');
+    $this->travel(config('honeypot.amount_of_seconds') + 1)->seconds();
+
+    $response = $this->post('/forgot-password', array_merge([
         'email' => $user->email,
-    ]);
+    ], $honeypotFields));
 
     Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
         $response = $this->get('/reset-password/'.$notification->token);
@@ -52,19 +78,58 @@ it('can reset password with valid token', function () {
 
     $user = User::factory()->create();
 
-    $response = $this->post('/forgot-password', [
+    $honeypotFields = getHoneypotFields('/forgot-password');
+    $this->travel(config('honeypot.amount_of_seconds') + 1)->seconds();
+
+    $response = $this->post('/forgot-password', array_merge([
         'email' => $user->email,
-    ]);
+    ], $honeypotFields));
 
     Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
-        $response = $this->post('/reset-password', [
+        $honeypotFields = getHoneypotFields('/reset-password/'.$notification->token);
+        $this->travel(config('honeypot.amount_of_seconds') + 1)->seconds();
+
+        $response = $this->post('/reset-password', array_merge([
             'token' => $notification->token,
             'email' => $user->email,
             'password' => 'password',
             'password_confirmation' => 'password',
-        ]);
+        ], $honeypotFields));
 
         $response->assertSessionHasNoErrors();
+
+        return true;
+    });
+})->skip(function () {
+    return ! Features::enabled(Features::resetPasswords());
+}, 'Password updates are not enabled.');
+
+it('cannot reset password if honeypot is tripped', function () {
+    Notification::fake();
+
+    $user = User::factory()->create();
+
+    $honeypotFields = getHoneypotFields('/forgot-password');
+    $this->travel(config('honeypot.amount_of_seconds') + 1)->seconds();
+
+    $response = $this->post('/forgot-password', array_merge([
+        'email' => $user->email,
+    ], $honeypotFields));
+
+    Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+        $honeypotFields = getHoneypotFields('/reset-password/'.$notification->token);
+        $randomFieldName = array_key_first($honeypotFields);
+        $honeypotFields[$randomFieldName] = 'spam';
+        $this->travel(config('honeypot.amount_of_seconds') + 1)->seconds();
+
+        $response = $this->post('/reset-password', array_merge([
+            'token' => $notification->token,
+            'email' => $user->email,
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ], $honeypotFields));
+
+        $response->assertSessionHasErrors(['contact']);
 
         return true;
     });

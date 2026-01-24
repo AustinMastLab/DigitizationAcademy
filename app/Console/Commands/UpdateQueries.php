@@ -20,6 +20,7 @@
 
 namespace App\Console\Commands;
 
+use DB;
 use Illuminate\Console\Command;
 
 class UpdateQueries extends Command
@@ -48,5 +49,24 @@ class UpdateQueries extends Command
         if (\Storage::exists('app/google-calendar/digitization-academy-b46a90f10ffb.json')) {
             \Storage::delete('app/google-calendar/digitization-academy-b46a90f10ffb.json');
         }
+
+        // Rename Spatie role "Member" -> "Staff"
+        // (Assumes default Spatie table name "roles")
+        DB::transaction(function (): void {
+            $staffExists = DB::table('roles')->where('name', 'Staff')->exists();
+
+            if ($staffExists) {
+                $this->warn('Role "Staff" already exists. Skipping rename of "Member" to avoid duplicates.');
+
+                return;
+            }
+
+            $updated = DB::table('roles')
+                ->where('name', 'Member')
+                ->update(['name' => 'Staff']);
+
+            $this->info("Roles updated: {$updated}");
+        });
+
     }
 }

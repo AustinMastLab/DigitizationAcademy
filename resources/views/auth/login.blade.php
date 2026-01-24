@@ -11,8 +11,9 @@
             <div class="row">
                 <div class="col-md-6 offset-md-3 col-sm-12">
                     <div class="contact-form-box shadow-box mb--30 px-sm-4">
-                        <form method="post" action="{{ route('login') }}" class="recaptcha" novalidate>
+                        <form method="post" action="{{ route('login') }}" novalidate>
                             @csrf
+                            @honeypot
                             <div class="form-group mb-3">
                                 <label for="login-email">Email</label>
                                 <input
@@ -37,9 +38,6 @@
                                         required
                                 >
                             </div>
-
-                            @include('partials.recaptcha')
-
                             <div class="form-group">
                                 <button
                                         type="submit"

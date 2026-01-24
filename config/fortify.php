@@ -20,6 +20,7 @@
 
 use App\Providers\RouteServiceProvider;
 use Laravel\Fortify\Features;
+use Spatie\Honeypot\ProtectAgainstSpam;
 
 return [
 
@@ -107,7 +108,7 @@ return [
     |
     */
 
-    'middleware' => ['web'],
+    'middleware' => ['web', ProtectAgainstSpam::class],
 
     /*
     |--------------------------------------------------------------------------
@@ -150,7 +151,7 @@ return [
     */
 
     'features' => [
-        // Features::registration(),
+        Features::registration(),
         Features::resetPasswords(),
         Features::emailVerification(),
         Features::updateProfileInformation(),

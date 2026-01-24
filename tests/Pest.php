@@ -13,8 +13,11 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(Tests\TestCase::class)->in('Feature', 'Unit');
-uses(RefreshDatabase::class)->in('Feature', 'Unit');
+uses(Tests\TestCase::class, RefreshDatabase::class)
+    ->in('Feature');
+
+uses(Tests\TestCase::class)
+    ->in('Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +45,34 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function getHoneypotFields(string $url, ?App\Models\User $user = null): array
 {
-    // ..
+    $request = test();
+    if ($user) {
+        $request = $request->actingAs($user);
+    }
+    $response = $request->get($url);
+
+    $nameFieldName = config('honeypot.name_field_name');
+    $validFromFieldName = config('honeypot.valid_from_field_name');
+
+    // Updated regex to handle multi-line input tags
+    // Finding name="website..."
+    preg_match('/name="('.$nameFieldName.'[^"]*)"/', $response->getContent(), $nameMatches);
+
+    // Finding name="valid_from" and its value
+    // Value might be on a different line
+    preg_match('/name="'.$validFromFieldName.'"\s+type="hidden"\s+value="([^"]+)"/', $response->getContent(), $validFromMatches);
+
+    if (empty($validFromMatches)) {
+        // Try another pattern if the above fails
+        preg_match('/name="'.$validFromFieldName.'".*?value="([^"]+)"/s', $response->getContent(), $validFromMatches);
+    }
+
+    $fields = [
+        $nameMatches[1] ?? $nameFieldName => '',
+        $validFromFieldName => $validFromMatches[1] ?? '',
+    ];
+
+    return $fields;
 }
