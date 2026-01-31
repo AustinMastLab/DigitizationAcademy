@@ -81,13 +81,19 @@
                         </div>
                         <div class="tab-pane fade" id="syllabus" role="tabpanel" aria-labelledby="syllabus-tab">
                             <div class="section-heading course" style="margin-bottom: 10px;">
-                                <p class="subtitle text-rose text-center">Sample Syllabus</p>
-                                <object data="{{ $course->present()->syllabus() }}"
-                                        type="application/pdf"
-                                        width="100%" height="600px">
-                                    <p>Your browser does not support embedded PDFs.
+                                <p id="syllabus-heading" class="subtitle text-rose text-center">Sample Syllabus</p>
+                                <object
+                                    data="{{ $course->present()->syllabus() }}"
+                                    type="application/pdf"
+                                    width="100%"
+                                    height="600px"
+                                    aria-labelledby="syllabus-heading"
+                                    title="Sample syllabus PDF"
+                                >
+                                    <p>
+                                        Your browser does not support embedded PDFs.
                                         <a href="{{ $course->present()->syllabus() }}">
-                                            Click here to download the PDF
+                                            Download the sample syllabus PDF
                                         </a>
                                     </p>
                                 </object>
