@@ -21,7 +21,7 @@ uses(Tests\TestCase::class)
 
 /*
 |--------------------------------------------------------------------------
-| Expectations
+| Expectation
 |--------------------------------------------------------------------------
 |
 | When you're writing tests, you often need to check that values meet certain conditions. The
