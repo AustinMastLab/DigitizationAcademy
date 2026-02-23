@@ -38,9 +38,10 @@
                                 <a href="#">Language<i class="fas fa-globe ms-2"></i></a>
                                 <x-language />
                             </li>
-                            <!-- Hidden Google Translate Element -->
-                            <div id="google_translate_element" style="display: none;"></div>
                         </ul>
+
+                        <!-- Hidden Google Translate Element -->
+                        <div id="google_translate_element" style="display: none;"></div>
                     </nav>
                 </div>
 

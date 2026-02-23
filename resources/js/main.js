@@ -125,13 +125,30 @@
 
         axilBackToTop: function () {
             let btn = $('#backto-top');
+
+            function setBackToTopFocusable(isFocusable) {
+                if (isFocusable) {
+                    btn.attr('aria-hidden', 'false');
+                    btn.attr('tabindex', '0');
+                } else {
+                    btn.attr('aria-hidden', 'true');
+                    btn.attr('tabindex', '-1');
+                }
+            }
+
+            // Ensure correct initial state (in case markup differs per page)
+            setBackToTopFocusable(btn.hasClass('show'));
+
             $(window).on('scroll', function () {
                 if ($(window).scrollTop() > 300) {
                     btn.addClass('show');
+                    setBackToTopFocusable(true);
                 } else {
                     btn.removeClass('show');
+                    setBackToTopFocusable(false);
                 }
             });
+
             btn.on('click', function (e) {
                 e.preventDefault();
                 $('html, body').animate({
