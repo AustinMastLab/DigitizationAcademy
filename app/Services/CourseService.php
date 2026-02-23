@@ -70,7 +70,7 @@ class CourseService
             [config('config.course_type.2_hour'), false] => 'Course concluded.',
             default => $nextOffering.($hasEvents
                 ? $this->formatMultiCourseOffering($course->events)
-                : (string) Carbon::now()->addYear()->year)
+                : 'to be announced')
         };
     }
 
