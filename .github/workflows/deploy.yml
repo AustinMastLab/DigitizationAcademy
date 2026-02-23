@@ -43,6 +43,8 @@ jobs:
 
       - name: Determine version bump
         id: version_bump
+        env:
+          CURRENT_COMMIT_MSG: ${{ github.event.head_commit.message }}
         run: |
           # Get the latest tag, check if any tags exist
           LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
@@ -62,8 +64,7 @@ jobs:
 
           echo "$COMMITS"
           
-          # Get the specific commit message for this push
-          CURRENT_COMMIT_MSG="${{ github.event.head_commit.message }}"
+          # Get the specific commit message for this push (passed via env to avoid backtick execution)
           echo "Current commit message: $(printf '%s' "$CURRENT_COMMIT_MSG")"
           
           # Determine version bump based on the current commit message only
