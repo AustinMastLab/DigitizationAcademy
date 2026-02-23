@@ -15,7 +15,8 @@
                             If you did not receive the email, you can request another one below.
                         </p>
 
-                        <form method="post" action="{{ route('verification.send') }}" novalidate>
+                        <h1 id="page-title" class="visually-hidden">Verify Email</h1>
+                        <form method="post" action="{{ route('verification.send') }}" aria-labelledby="page-title" novalidate>
                             @csrf
                             @honeypot
                             <div class="form-group">

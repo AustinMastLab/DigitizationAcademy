@@ -1880,3 +1880,23 @@ ul.course-objectives li{
 .header-offcanvasmenu .offcanvas-body .main-navigation li .main-navigation-button:hover {
     color: var(--color-primary) !important;
 }
+
+/* WCAG 1.4.11: force a boundary that axe will detect, without going back to a thick dark border */
+/* Contact form: lighter-looking boundary by using a lighter color + thicker border */
+.contact-form-box .form-control,
+.contact-form-box textarea.form-control,
+.contact-form-box select.form-control {
+  background-color: #ffffff;
+  border: 2px solid #6b7280 !important;
+  border-radius: 0.5rem;
+  box-shadow: none !important;
+  color: #0f172a;
+}
+
+.contact-form-box .form-control:focus,
+.contact-form-box .form-control:focus-visible {
+  border-color: #1d4ed8 !important;
+  outline: 3px solid rgba(29, 78, 216, 0.30);
+  outline-offset: 2px;
+  box-shadow: none !important;
+}

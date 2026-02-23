@@ -10,7 +10,8 @@
                             </div>
                         @endif
 
-                        <form method="post" action="{{ route('password.email') }}" novalidate>
+                        <h1 id="page-title" class="visually-hidden">Forgot Password</h1>
+                        <form method="post" action="{{ route('password.email') }}" aria-labelledby="page-title" novalidate>
                             @csrf
                             @honeypot
                             <div class="form-group mb-3">

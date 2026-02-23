@@ -6,7 +6,8 @@
                     <div class="contact-form-box shadow-box mb--30 px-sm-4">
                         Please confirm your password before continuing.
 
-                        <form method="POST" action="{{ route('password.confirm') }}">
+                        <h1 id="page-title" class="visually-hidden">Confirm Password</h1>
+                        <form method="POST" action="{{ route('password.confirm') }}" aria-labelledby="page-title">
                             @csrf
                             @honeypot
                             <div class="row mb-3">

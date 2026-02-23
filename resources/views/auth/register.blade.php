@@ -4,7 +4,8 @@
             <div class="row">
                 <div class="col-md-6 offset-md-3 col-sm-12">
                     <div class="contact-form-box shadow-box mb--30 px-sm-4">
-                        <form method="post" action="{{ route('register') }}" novalidate>
+                        <h1 id="page-title" class="visually-hidden">Register</h1>
+                        <form method="post" action="{{ route('register') }}" aria-labelledby="page-title" novalidate>
                             @csrf
                             @honeypot
                             <div class="form-group mb-3">
