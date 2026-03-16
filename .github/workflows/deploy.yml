@@ -37,9 +37,9 @@ jobs:
     outputs:
       release-tag: ${{ steps.create_release.outputs.tag_name }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
-          fetch-depth: 0 # Fetch all history for proper versioning
+          fetch-depth: 0
 
       - name: Determine version bump
         id: version_bump
@@ -160,14 +160,15 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
 
-  # Production deployment (runs after release creation)
+  # ... existing code ...
+
   build-and-deploy-production:
     needs: create-release
     runs-on: ubuntu-latest
     environment: production
     if: "github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '[skip deploy]') && !contains(github.event.head_commit.message, '[no deploy]')"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Get Runner IP
         id: ip
         uses: haythem/public-ip@v1.3
@@ -262,10 +263,9 @@ jobs:
   build-and-deploy-development:
     runs-on: ubuntu-latest
     environment: development
-    # Skip deployment if commit message contains [skip deploy] or [no deploy]
     if: "github.ref == 'refs/heads/development' && !contains(github.event.head_commit.message, '[skip deploy]') && !contains(github.event.head_commit.message, '[no deploy]')"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Get Runner IP
         id: ip
         uses: haythem/public-ip@v1.3
@@ -346,6 +346,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_SHA: ${{ github.sha }}
           GITHUB_REPO: ${{ github.repository }}
+          OPCACHE_WEBHOOK_TOKEN: ${{ secrets.OPCACHE_WEBHOOK_TOKEN }}
       - name: Revoke Runner IP from AWS Security Group
         if: always()
         run: |

@@ -163,15 +163,12 @@ task('opcache:reset', function () {
     }
 
     $environment = get('environment', 'production');
-    $domain = ($environment === 'production') ? 'digitizationacademy.org' : 'dev.digitizationacademy.org';
-
-    // Static URL
-    $url = "https://{$domain}/opcache/reset";
+    $domain = ($environment === 'production') ? 'biospex.org' : 'dev.biospex.org';
+    $url = "https://api.{$domain}/opcache/reset";
 
     try {
-        writeln("Triggering OpCache reset via application route: {$url}");
-        // Send token as POST data
-        $response = run("curl -X POST -sL -k -d 'token={$token}' '{$url}'");
+        writeln("Triggering OpCache reset via API: {$url}");
+        $response = run("curl -sL -k -X POST -d 'token={$token}' '{$url}'");
 
         if (str_contains($response, 'successful')) {
             writeln('✅ OpCache reset successful');

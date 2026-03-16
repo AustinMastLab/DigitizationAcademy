@@ -146,14 +146,13 @@ task('deploy', [
 
     // Phase 8: Finalization
     'set:permissions',
-    'deploy:clear_paths',      // Remove unnecessary files/directories
-    'deploy:publish',          // <--- SYMLINK SWITCHES HERE
+    'deploy:clear_paths',
+    'deploy:publish',
 
-    // Phase 6: OpCache Management (Now moved after publish)
-    'opcache:reset',           // <--- NOW IT WILL FIND THE ROUTE
+    // Phase 6: OpCache Management
+    'opcache:reset',
 
-    'deploy:verify-structure', // Verify flat structure post-deploy
+    'deploy:verify-structure',
 ]);
 
-// Hooks
 after('deploy:failed', 'deploy:unlock');
