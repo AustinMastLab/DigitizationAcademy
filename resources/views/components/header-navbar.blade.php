@@ -45,38 +45,38 @@
                     </nav>
                 </div>
 
-                <div class="header-action">
-                    <ul class="list-unstyled">
-                        @role('Super Admin')
-                            <!-- button associated with large screen aside -->
-                            <li class="sidemenu-btn d-lg-block d-none">
-                                <button class="btn-wrap"
-                                        type="button"
-                                        data-bs-toggle="offcanvas"
-                                        data-bs-target="#offcanvasMenuRight"
-                                        aria-label="Open side menu"
+                    <div class="header-action">
+                        <ul class="list-unstyled" role="presentation">
+                            @role('Super Admin')
+                                <!-- button associated with large screen aside -->
+                                <li class="sidemenu-btn d-lg-block d-none" role="presentation">
+                                    <button class="btn-wrap"
+                                            type="button"
+                                            data-bs-toggle="offcanvas"
+                                            data-bs-target="#offcanvasMenuRight"
+                                            aria-label="Open side menu"
+                                    >
+                                        <span aria-hidden="true"></span>
+                                        <span aria-hidden="true"></span>
+                                        <span aria-hidden="true"></span>
+                                    </button>
+                                </li>
+                            @endrole
+                            <li class="mobile-menu-btn sidemenu-btn d-lg-none d-block" role="presentation">
+                                <button
+                                    class="btn-wrap"
+                                    type="button"
+                                    data-bs-toggle="offcanvas"
+                                    data-bs-target="#mobilemenu-popup"
+                                    aria-label="Open main menu"
                                 >
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
+                                    <span aria-hidden="true"></span>
+                                    <span aria-hidden="true"></span>
+                                    <span aria-hidden="true"></span>
                                 </button>
                             </li>
-                        @endrole
-                        <li class="mobile-menu-btn sidemenu-btn d-lg-none d-block">
-                            <button
-                                class="btn-wrap"
-                                type="button"
-                                data-bs-toggle="offcanvas"
-                                data-bs-target="#mobilemenu-popup"
-                                aria-label="Open main menu"
-                            >
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+                        </ul>
+                    </div>
             </div>
         </div>
     </div>
