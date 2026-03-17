@@ -301,47 +301,59 @@ li {
     transition: var(--transition);
     position: relative;
     z-index: 1;
-    cursor:pointer;
+    cursor: pointer;
 }
+
 .digi-btn.btn-fill-primary {
     background-color: var(--color-rose);
     color: var(--color-white);
     border: 1px solid var(--color-rose);
     top: -2px;
-    overflow: hidden; }
+    overflow: visible;
+    position: relative;
+    transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        color 0.25s ease;
+}
+
 .digi-btn.btn-fill-primary.secondary {
     background-color: var(--color-blue-shade-2);
     color: var(--color-white);
-    border: 1px solid var(--color-blue-shade-2); }
+    border: 1px solid var(--color-blue-shade-2);
+}
+
 .digi-btn.btn-fill-primary.tertiary {
     background-color: #3850AE;
     color: var(--color-white);
     border: 1px solid #3850AE;
-    width: 350px; }
+    width: 350px;
+}
+
 .digi-btn.btn-fill-primary::after {
-    content: "";
-    height: 300px;
-    width: 300px;
+    content: none;
+}
+
+.digi-btn.btn-fill-primary:hover,
+.digi-btn.btn-fill-primary:focus-visible {
     background-color: var(--color-link);
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateY(-50%) translateX(-50%) scale(0);
-    transition: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    z-index: -1; }
-.digi-btn.btn-fill-primary:hover {
-    background-color: var(--color-link);
-    border-color: var(--color-link); }
-.digi-btn.btn-fill-primary:hover::after {
-    transform: translateY(-50%) translateX(-50%) scale(1); }
-.digi-btn.btn-fluid {
-    width: 100%; }
+    border-color: var(--color-link);
+    color: var(--color-white);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.digi-btn.btn-fill-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+}
 
 .digi-btn.btn-fill-primary.course {
     width: 100px;
-    padding:3px 0 3px 0;
-    text-decoration:none;
+    padding: 3px 0;
+    text-decoration: none;
 }
 
 .nav-pills .nav-link {
