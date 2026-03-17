@@ -350,6 +350,21 @@ li {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
 }
 
+/* Keyboard focus for primary buttons */
+.digi-btn.btn-fill-primary:focus-visible {
+    outline: 3px solid var(--color-gray-4);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(153, 161, 170, 0.25);
+}
+
+/* Keyboard focus for accordion buttons */
+.faq-accordion .accordion-button:focus-visible,
+.faq-accordion .accordion-button:focus {
+    outline: 3px solid var(--color-gray-4);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(153, 161, 170, 0.25);
+}
+
 .digi-btn.btn-fill-primary.course {
     width: 100px;
     padding: 3px 0;
