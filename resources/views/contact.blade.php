@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :title="'Contact | ' . config('app.name', 'FSU Digitization Academy')">
     <section class="banner page">
         <div class="container-fluid">
             <div class="banner-content">

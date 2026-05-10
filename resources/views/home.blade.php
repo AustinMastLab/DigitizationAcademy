@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :title="'Home | ' . config('app.name', 'FSU Digitization Academy')">
     <!-- shape groups -->
     <ul class="shape-group-6 list-unstyled">
         <li class="shape shape-1">

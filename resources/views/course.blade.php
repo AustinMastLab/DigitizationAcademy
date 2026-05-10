@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :title="$course->title . ' Course | ' . config('app.name', 'FSU Digitization Academy')">
     <!--              Hero Banner            -->
     <section class="banner course bg-dark">
         <div class="container-fluid">

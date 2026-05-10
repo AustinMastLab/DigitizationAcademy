@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (c) 2022. Digitization Academy
  * idigacademy@gmail.com
@@ -19,24 +20,27 @@
 
 namespace App\View\Components;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class AppLayout extends Component
 {
+    public ?string $title;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(?string $title = null)
     {
-        //
+        $this->title = $title;
     }
 
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return View|\Closure|string
      */
     public function render()
     {
