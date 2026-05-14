@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ $title ?? config('app.name', 'FSU Digitization Academy') }}</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ mix('images/logo/favicon.png') }}">
 
