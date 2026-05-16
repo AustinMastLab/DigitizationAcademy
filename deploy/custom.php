@@ -148,43 +148,33 @@ task('deploy:ci-artifacts', function () {
 
 /*
  * =============================================================================
- * OPCACHE MANAGEMENT
+ * OPCACHE & ENVIRONMENT MANAGEMENT
  * =============================================================================
  */
 
 desc('Reset OpCache after deployment');
 task('opcache:reset', function () {
-    $token = $_ENV['API_TOKEN'] ?? getenv('API_TOKEN') ?? '';
+    $token = $_ENV['OPCACHE_WEBHOOK_TOKEN'] ?? getenv('OPCACHE_WEBHOOK_TOKEN') ?? '';
 
     if (empty($token)) {
-        writeln('⚠️  Skipping OpCache reset: API_TOKEN not set');
+        writeln('⚠️  Skipping OpCache reset: OPCACHE_WEBHOOK_TOKEN not set');
 
         return;
     }
 
     $environment = get('environment', 'production');
-    $domain = ($environment === 'production') ? 'api.biospex.org' : 'devapi.biospex.org';
-    $url = "https://{$domain}/v1/opcache/reset";
+    $domain = ($environment === 'production') ? 'biospex.org' : 'dev.biospex.org';
+    $url = "https://api.{$domain}/opcache/reset";
 
     try {
         writeln("Triggering OpCache reset via API: {$url}");
-
-        $response = run(
-            'curl -sS -k -X POST '.
-            '--connect-timeout 10 --max-time 30 '.
-            "-H 'Authorization: Bearer {$token}' ".
-            "-H 'Accept: application/json' ".
-            "-w '\nHTTP_STATUS=%{http_code}\n' ".
-            "'{$url}'"
-        );
+        $response = run("curl -sL -k -X POST -d 'token={$token}' '{$url}'");
 
         if (str_contains($response, 'successful')) {
             writeln('✅ OpCache reset successful');
-
-            return;
+        } else {
+            throw new \Exception("Response: {$response}");
         }
-
-        throw new \Exception("Response: {$response}");
     } catch (\Exception $e) {
         writeln('❌ OpCache reset failed: '.$e->getMessage());
     }

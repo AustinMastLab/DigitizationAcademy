@@ -170,7 +170,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version: '20'
           cache: 'yarn'
 
       - name: Install Yarn dependencies
@@ -213,6 +213,7 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
           GITHUB_REPO: ${{ github.repository }}
           API_TOKEN: ${{ secrets.API_TOKEN }}
+          OPCACHE_WEBHOOK_TOKEN: ${{ secrets.OPCACHE_WEBHOOK_TOKEN }}
 
       - name: Revoke Runner IP from AWS Security Group
         if: always()
@@ -237,27 +238,33 @@ jobs:
 
       - name: Create Release
         run: |
-          NOTES_FILE="$(mktemp)"
+          if [ "${{ needs.calculate-version.outputs.current_version }}" = "0.0.0" ]; then
+            RELEASE_NOTES="## What's Changed
 
-          cat > "$NOTES_FILE" <<'EOF'
-          ## What's Changed
+          🎉 **First Release!**
+
+          Auto-generated initial release from main branch.
+
+          **Latest commit:**
+          \`\`\`
+          $COMMIT_MESSAGE
+          \`\`\`"
+          else
+            RELEASE_NOTES="## What's Changed
 
           Auto-generated release from main branch.
 
           **Commits included:**
-          ```
-          __COMMITS_HERE__
-          ```
+          \`\`\`
+          $COMMIT_MESSAGE
+          \`\`\`
 
-          **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ needs.calculate-version.outputs.current_version }}...${{ needs.calculate-version.outputs.new_version }}
-          EOF
-
-          # Replace placeholder with the commit message safely (no shell expansion)
-          perl -0777 -pe 's/__COMMITS_HERE__/\Q$ENV{COMMIT_MESSAGE}\E/g' -i "$NOTES_FILE"
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ needs.calculate-version.outputs.current_version }}...${{ needs.calculate-version.outputs.new_version }}"
+          fi
 
           gh release create "${{ needs.calculate-version.outputs.new_version }}" \
             --title "Release ${{ needs.calculate-version.outputs.new_version }}" \
-            --notes-file "$NOTES_FILE"
+            --notes "$RELEASE_NOTES"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
@@ -316,7 +323,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version: '20'
           cache: 'yarn'
 
       - name: Install Yarn dependencies
@@ -359,6 +366,7 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
           GITHUB_REPO: ${{ github.repository }}
           API_TOKEN: ${{ secrets.API_TOKEN }}
+          OPCACHE_WEBHOOK_TOKEN: ${{ secrets.OPCACHE_WEBHOOK_TOKEN }}
 
       - name: Revoke Runner IP from AWS Security Group
         if: always()
