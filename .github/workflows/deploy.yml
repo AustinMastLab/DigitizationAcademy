@@ -206,6 +206,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
 
+      - name: Add production host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 3.142.169.134 >> ~/.ssh/known_hosts
+
       - name: Deploy with Deployer
         run: vendor/bin/dep deploy production
         env:
@@ -358,6 +363,11 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+
+      - name: Add development host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 3.138.217.206 >> ~/.ssh/known_hosts
 
       - name: Deploy with Deployer
         run: vendor/bin/dep deploy development
