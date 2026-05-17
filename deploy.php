@@ -39,7 +39,7 @@ require 'deploy/custom.php';
 set('repository', 'https://github.com/AustinMastLab/DigitizationAcademy.git');
 set('base_path', '/data/web');
 set('remote_user', 'ubuntu');
-set('php_fpm_version', '8.3');
+set('php_fpm_version', '8.5');
 set('ssh_multiplexing', true);
 set('writable_mode', 'chmod');
 set('keep_releases', 3);  // Keep only 3 recent releases
