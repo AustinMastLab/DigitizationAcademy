@@ -211,6 +211,26 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H 3.142.169.134 >> ~/.ssh/known_hosts
 
+      - name: Write deploy secrets file (production)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+          OPCACHE_WEBHOOK_TOKEN: ${{ secrets.OPCACHE_WEBHOOK_TOKEN }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_SECURITY_GROUP_ID: ${{ secrets.AWS_SECURITY_GROUP_ID }}
+        run: |
+          cat > .env.deploy <<EOF
+          GITHUB_TOKEN=${GITHUB_TOKEN}
+          API_TOKEN=${API_TOKEN}
+          OPCACHE_WEBHOOK_TOKEN=${OPCACHE_WEBHOOK_TOKEN}
+          AWS_REGION=${AWS_REGION}
+          AWS_SECURITY_GROUP_ID=${AWS_SECURITY_GROUP_ID}
+          EOF
+
+          ssh ubuntu@3.142.169.134 "mkdir -p /data/web/digitizationacademy/shared"
+          scp .env.deploy ubuntu@3.142.169.134:/data/web/digitizationacademy/shared/.env.deploy
+          ssh ubuntu@3.142.169.134 "chmod 600 /data/web/digitizationacademy/shared/.env.deploy"
+
       - name: Deploy with Deployer
         run: vendor/bin/dep deploy production
         env:
@@ -368,6 +388,26 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H 3.138.217.206 >> ~/.ssh/known_hosts
+
+      - name: Write deploy secrets file (development)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+          OPCACHE_WEBHOOK_TOKEN: ${{ secrets.OPCACHE_WEBHOOK_TOKEN }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_SECURITY_GROUP_ID: ${{ secrets.AWS_SECURITY_GROUP_ID }}
+        run: |
+          cat > .env.deploy <<EOF
+          GITHUB_TOKEN=${GITHUB_TOKEN}
+          API_TOKEN=${API_TOKEN}
+          OPCACHE_WEBHOOK_TOKEN=${OPCACHE_WEBHOOK_TOKEN}
+          AWS_REGION=${AWS_REGION}
+          AWS_SECURITY_GROUP_ID=${AWS_SECURITY_GROUP_ID}
+          EOF
+
+          ssh ubuntu@3.138.217.206 "mkdir -p /data/web/digitizationacademy/shared"
+          scp .env.deploy ubuntu@3.138.217.206:/data/web/digitizationacademy/shared/.env.deploy
+          ssh ubuntu@3.138.217.206 "chmod 600 /data/web/digitizationacademy/shared/.env.deploy"
 
       - name: Deploy with Deployer
         run: vendor/bin/dep deploy development
