@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c9fbc8a667e6c8fe910595ad336702b9",
+    "content-hash": "7ff0ac53e38a833fcbea06f44ce66054",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -9289,6 +9289,35 @@
     ],
     "packages-dev": [
         {
+            "name": "austinmastlab/deployer-recipes",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AustinMastLab/deployer-recipes",
+                "reference": "d0713fa08b3df4560d1aaf7b038747ea6eaf1904"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AustinMastLab/deployer-recipes/zipball/d0713fa08b3df4560d1aaf7b038747ea6eaf1904",
+                "reference": "d0713fa08b3df4560d1aaf7b038747ea6eaf1904",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "suggest": {
+                "deployer/deployer": "The recipes are written for Deployer 7 and 8."
+            },
+            "bin": [
+                "bin/generate-env",
+                "bin/push-env-params",
+                "bin/remove-env-params"
+            ],
+            "type": "library",
+            "description": "Shared Deployer recipes and AWS SSM environment tools for AustinMastLab sites",
+            "time": "2026-10-05T15:21:12+00:00"
+        },
+        {
             "name": "barryvdh/laravel-debugbar",
             "version": "v3.16.5",
             "source": {
@@ -13743,13 +13772,13 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.3.0",
         "ext-pdo": "*"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }

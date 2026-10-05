@@ -180,20 +180,6 @@ task('opcache:reset', function () {
     }
 });
 
-desc('Generate .env from AWS SSM Parameter Store');
-task('env:ssm', function () {
-    $appName = 'digitizationacademy';
-    $environment = currentHost()->get('environment') ?? 'development';
-    $remoteUser = get('remote_user');
-    $homeDir = "/home/{$remoteUser}";
-
-    // Assumes the 'generate-env' script exists in the home directory on the server
-    $cmd = "cd {$homeDir} && ./generate-env {$appName} {$environment}";
-
-    writeln("Running: {$cmd}");
-    run($cmd);
-})->once();
-
 desc('Verify flat deployment structure');
 task('deploy:verify-structure', function () {
     $nestCheck = run('find {{release_path}} -type d -name "deployment-package" | wc -l');
