@@ -18,7 +18,7 @@
         "laravel-mix": "^6.0.49",
         "lodash": "^4.17.19",
         "pa11y": "^9.0.1",
-        "pa11y-ci": "^4.0.1",
+        "pa11y-ci": "^5.0.0",
         "postcss": "^8.1.14"
     },
     "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
