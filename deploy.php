@@ -145,16 +145,15 @@ task('deploy', [
 
     // Phase 7: Domain-Specific Supervisor Management
     'supervisor:reload', // Update configs only
-    'artisan:horizon:terminate',
-    'artisan:queue:restart',
 
     // Phase 8: Finalization
     'set:permissions',
     'deploy:clear_paths',
     'deploy:publish',
 
-    // Phase 6: OpCache Management
-    'opcache:reset',
+    // Restart workers after publish so Supervisor starts them from the new current
+    'artisan:horizon:terminate',
+    'artisan:queue:restart',
 
     'deploy:verify-structure',
 ]);

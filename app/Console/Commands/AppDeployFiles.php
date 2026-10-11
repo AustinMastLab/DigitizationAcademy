@@ -35,7 +35,9 @@ class AppDeployFiles extends Command
      *
      * @var string
      */
-    protected $signature = 'app:deploy-files {--dry-run : Show what would be done without making changes}';
+    protected $signature = 'app:deploy-files
+        {--current-path= : Path Supervisor runs the app from (defaults to this app\'s base path)}
+        {--dry-run : Show what would be done without making changes}';
 
     /**
      * The console command description.
@@ -90,31 +92,12 @@ class AppDeployFiles extends Command
      */
     private function buildReplacementMap(): void
     {
-        // Your current apps config keys
-        $keys = [
-            'APP_PATH',
-            'APP_ENV',
-            'APP_TAG',
-            'APP_SERVER_USER',
-        ];
-
-        $this->replacements = collect($keys)->mapWithKeys(function ($key) {
-            return [$key => $this->resolveConfigurationValue($key)];
-        });
-    }
-
-    /**
-     * Resolve the config value based on the key name.
-     */
-    private function resolveConfigurationValue(string $key): string
-    {
-        if (str_starts_with($key, 'APP_')) {
-            $configKey = strtolower(str_replace('APP_', '', $key));
-
-            return (string) config('app.'.$configKey);
-        }
-
-        return (string) config('config.'.strtolower($key));
+        $this->replacements = collect([
+            '{{APP_CURRENT_PATH}}' => rtrim($this->option('current-path') ?: base_path(), '/'),
+            '{{APP_ENV}}' => (string) config('app.env'),
+            '{{APP_TAG}}' => (string) config('app.tag'),
+            '{{APP_SERVER_USER}}' => (string) config('app.server_user'),
+        ]);
     }
 
     /**
