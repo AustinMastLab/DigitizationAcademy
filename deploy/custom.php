@@ -47,12 +47,12 @@ task('artisan:app:update-queries', function () {
 
 /**
  * Deploy application files
- * Executes the deploy-files artisan command in the current release path
+ * Renders resources/supervisor templates into shared storage, pointing Supervisor at current
  */
 desc('Deploying files...');
 task('artisan:app:deploy-files', function () {
     cd('{{release_or_current_path}}');
-    run('php artisan app:deploy-files');
+    run('php artisan app:deploy-files --current-path={{current_path}}');
 });
 
 /**
@@ -148,37 +148,9 @@ task('deploy:ci-artifacts', function () {
 
 /*
  * =============================================================================
- * OPCACHE & ENVIRONMENT MANAGEMENT
+ * ENVIRONMENT MANAGEMENT
  * =============================================================================
  */
-
-desc('Reset OpCache after deployment');
-task('opcache:reset', function () {
-    $token = $_ENV['OPCACHE_WEBHOOK_TOKEN'] ?? getenv('OPCACHE_WEBHOOK_TOKEN') ?? '';
-
-    if (empty($token)) {
-        writeln('⚠️  Skipping OpCache reset: OPCACHE_WEBHOOK_TOKEN not set');
-
-        return;
-    }
-
-    $environment = get('environment', 'production');
-    $domain = ($environment === 'production') ? 'biospex.org' : 'dev.biospex.org';
-    $url = "https://api.{$domain}/opcache/reset";
-
-    try {
-        writeln("Triggering OpCache reset via API: {$url}");
-        $response = run("curl -sL -k -X POST -d 'token={$token}' '{$url}'");
-
-        if (str_contains($response, 'successful')) {
-            writeln('✅ OpCache reset successful');
-        } else {
-            throw new \Exception("Response: {$response}");
-        }
-    } catch (\Exception $e) {
-        writeln('❌ OpCache reset failed: '.$e->getMessage());
-    }
-});
 
 desc('Verify flat deployment structure');
 task('deploy:verify-structure', function () {

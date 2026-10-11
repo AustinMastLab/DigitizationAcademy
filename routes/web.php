@@ -41,9 +41,6 @@ use Spatie\Honeypot\ProtectAgainstSpam;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// OpCache Reset Route (Token passed in POST body)
-Route::post('/opcache/reset', [HomeController::class, 'resetOpCache'])->name('opcache.reset');
-
 Route::get('catalog', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('catalog/{type}', [CatalogController::class, 'show'])
     ->name('catalog.show')

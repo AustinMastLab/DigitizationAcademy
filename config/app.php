@@ -54,10 +54,8 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    'path' => base_path(),
     'tag' => env('APP_TAG', 'digitizationacademy'),
     'server_user' => env('APP_SERVER_USER', 'ubuntu'),
-    'opcache_webhook_token' => env('OPCACHE_WEBHOOK_TOKEN'),
 
     /*
     |--------------------------------------------------------------------------
