@@ -20,6 +20,8 @@
         <env name="DB_DATABASE" value=":memory:"/>
         <env name="MAIL_MAILER" value="smtp"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="RESPONSE_CACHE_DRIVER" value="array"/>
+        <env name="RESPONSE_CACHE_ENABLED" value="false"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
     </php>
