@@ -22,7 +22,6 @@ import './vendor/imagesloaded.pkgd.min';
 import './vendor/isotope.pkgd.min.js';
 import './vendor/jquery.nav';
 import './vendor/jquery-appear';
-import './vendor/slick.min';
 import './vendor/tilt';
 import './main';
 import './google-translate';

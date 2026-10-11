@@ -22,7 +22,6 @@
             axilInit.stickyHeaderMenu();
             axilInit.mobileMenuActivation();
             axilInit.counterUp();
-            axilInit.axilSlickActivation();
             axilInit.magnificPopupActivation();
             axilInit.countdownInit('.countdown', '2022/12/01');
             axilInit.tiltAnimation();
@@ -232,10 +231,6 @@
                     od.update(updateData);
                 });
             });
-        },
-
-        axilSlickActivation: function (e) {
-            $('.slick-slider').slick();
         },
 
         magnificPopupActivation: function () {
