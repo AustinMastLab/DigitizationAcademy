@@ -2,9 +2,13 @@
 
 ## Deployment
 
-- Deployments run through **GitHub Actions + Deployer 8** (`.github/workflows/deploy.yml`, `deploy.php`, `deploy/custom.php`).
-- **Production:** pushing or merging to `main` calculates the next version, deploys to production (`3.142.169.134`), and creates a GitHub release. Add `[skip deploy]` or `[no deploy]` to the commit message to push without deploying.
+- Deployments run through **GitHub Actions + Deployer 8** (`.github/workflows/deploy.yml`, `deploy.php`, `deploy/custom.php`). `deploy.yml` calls `deploy-environment.yml` for each environment.
+- **Tests:** `.github/workflows/tests.yml` runs Pest on every pull request into `main` or `development`, along with Pint on the changed files and `composer audit`. Every deploy runs the tests first and stops if they fail. The tests use SQLite in memory and no built assets (`withoutMix()` in `tests/TestCase.php`).
+- **Production:** pushing or merging to `main` runs the tests, calculates the next version, deploys to production (`3.142.169.134`), and creates a GitHub release with notes listing the pull requests since the previous release. Add `[skip deploy]` or `[no deploy]` to the commit message to push without deploying.
 - **Development:** pushes to `development` don't deploy. Run the workflow manually (Actions → Build and Deploy → Run workflow → `development`) to deploy to the development server (`3.138.217.206`).
+- Only one deploy runs at a time per branch; a second one waits.
+- The deploy trusts only the SSH host keys in `.github/known_hosts`. If a server's keys change, regenerate the file with `ssh-keyscan -t ed25519,ecdsa,rsa <ip>` after checking the fingerprints.
+- Dependabot (`.github/dependabot.yml`) opens weekly update pull requests into `development` for GitHub Actions, Composer and npm.
 - Assets are built in CI and downloaded as an artifact; the server doesn't build them.
 - Releases live under `/data/web/digitizationacademy/releases/<n>`, with `current` pointing at the active one. Both servers serve it with PHP 8.5 (`php8.5-fpm`).
 - nginx passes PHP the resolved release path (`fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;` and `fastcgi_param DOCUMENT_ROOT $realpath_root;` after `include fastcgi_params;`), so a new release is served without an OPcache reset. Keep both lines in the site config on each server.
