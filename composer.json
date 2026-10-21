@@ -21,7 +21,7 @@
         "laravel/horizon": "^5.48",
         "laravel/sanctum": "^v4.0.0",
         "laravel/tinker": "^3.0",
-        "realrashid/sweet-alert": "^v7.3.0",
+        "realrashid/sweet-alert": "^8.0",
         "spatie/laravel-honeypot": "^4.6",
         "spatie/laravel-permission": "^8.3",
         "spatie/laravel-responsecache": "^7.7"

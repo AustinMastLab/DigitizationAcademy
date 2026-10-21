@@ -58,7 +58,7 @@
     @auth
         <x-aside-menu />
     @endauth
-@include('sweetalert::alert')
+@sweetAlert
 <script src="{{ mix('js/app.js') }}"></script>
 @stack('scripts')
 </body>
