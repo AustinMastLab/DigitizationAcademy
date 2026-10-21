@@ -76,10 +76,10 @@ task('set:permissions', function () {
 
 /**
  * Publish Sweet Alert 2 assets
- * Executes the sweetalert:publish artisan command
+ * Publishes public/vendor/sweetalert/sweet-alert.js, which the Sweet Alert view loads (public/vendor isn't in git)
  */
-desc('Publish all Sweet Alert 2 assets');
-task('artisan:sweetalert:publish', artisan('sweetalert:publish'));
+desc('Publish the Sweet Alert JavaScript');
+task('artisan:alert:publish', artisan('alert:publish --assets --force'));
 
 /**
  * Reload Supervisor configuration

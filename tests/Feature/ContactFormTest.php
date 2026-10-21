@@ -46,6 +46,21 @@ it('can submit contact form with honeypot', function () {
     Mail::assertQueued(Contact::class);
 });
 
+it('shows the sent message as a Sweet Alert toast after redirecting', function () {
+    Mail::fake();
+    $honeypotFields = getHoneypotFields('/contact');
+    $this->travel(config('honeypot.amount_of_seconds') + 1)->seconds();
+
+    $response = $this->followingRedirects()->from('/contact')->post('/contact', array_merge([
+        'name' => 'John Doe',
+        'email' => 'john@example.com',
+        'message' => 'Hello, this is a test message.',
+    ], $honeypotFields));
+
+    $response->assertOk()
+        ->assertSee('vendor/sweetalert/sweet-alert.js', false)
+        ->assertSee('Contact message sent successfully.');
+});
 it('cannot submit contact form if honeypot is tripped', function () {
     Mail::fake();
 
