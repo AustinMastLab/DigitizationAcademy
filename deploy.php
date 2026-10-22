@@ -34,10 +34,14 @@ namespace Deployer;
 
 require 'recipe/laravel.php';
 require __DIR__.'/vendor/austinmastlab/deployer-recipes/recipe/ssm-env.php';
+require __DIR__.'/vendor/austinmastlab/deployer-recipes/recipe/ci-artifacts.php';
 require 'deploy/custom.php';
 
 // .env is generated from SSM /digitizationacademy/{environment} by env:ssm (austinmastlab/deployer-recipes).
 set('ssm_app', 'digitizationacademy');
+
+// supervisor:reload (deployer-recipes) updates only this site's Supervisor group
+set('supervisor_groups', ['da']);
 
 // Deployment Configuration
 set('repository', 'https://github.com/AustinMastLab/DigitizationAcademy.git');
