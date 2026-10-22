@@ -27,7 +27,7 @@
         "spatie/laravel-responsecache": "^7.7"
     },
     "require-dev": {
-        "austinmastlab/deployer-recipes": "^1.0.1",
+        "austinmastlab/deployer-recipes": "^1.2.0-rc1",
         "barryvdh/laravel-debugbar": "^3.5",
         "barryvdh/laravel-ide-helper": "^v3.0.0",
         "deployer/deployer": "^8.0",

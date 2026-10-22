@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0ec91fb2514b20732786ca22fd5308a9",
+    "content-hash": "41889d1108bf21510f15dd43073bd51b",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -10605,16 +10605,16 @@
     "packages-dev": [
         {
             "name": "austinmastlab/deployer-recipes",
-            "version": "v1.1.0",
+            "version": "v1.2.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AustinMastLab/deployer-recipes",
-                "reference": "6b1d741b3911863b6562ff28c7e9354ae688aeba"
+                "reference": "9622dea28fca2d50f21001ceed0794f342a1a87a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AustinMastLab/deployer-recipes/zipball/6b1d741b3911863b6562ff28c7e9354ae688aeba",
-                "reference": "6b1d741b3911863b6562ff28c7e9354ae688aeba",
+                "url": "https://api.github.com/repos/AustinMastLab/deployer-recipes/zipball/9622dea28fca2d50f21001ceed0794f342a1a87a",
+                "reference": "9622dea28fca2d50f21001ceed0794f342a1a87a",
                 "shasum": ""
             },
             "require": {
@@ -10631,7 +10631,7 @@
             ],
             "type": "library",
             "description": "Shared Deployer recipes and AWS SSM environment tools for AustinMastLab sites",
-            "time": "2026-10-11T17:41:30+00:00"
+            "time": "2026-10-21T16:43:04+00:00"
         },
         {
             "name": "barryvdh/laravel-debugbar",
