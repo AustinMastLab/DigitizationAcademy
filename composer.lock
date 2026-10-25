@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "41889d1108bf21510f15dd43073bd51b",
+    "content-hash": "035dc2ee7601167a813d96fee34cef23",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -4317,16 +4317,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "3.15.0",
+            "version": "3.15.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CarbonPHP/carbon.git",
-                "reference": "217d38553209bdb44e01590d9e9a2e4df8354cce"
+                "reference": "ce0e5636fae7d1e99856eb70cae4c719a284aa08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/217d38553209bdb44e01590d9e9a2e4df8354cce",
-                "reference": "217d38553209bdb44e01590d9e9a2e4df8354cce",
+                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/ce0e5636fae7d1e99856eb70cae4c719a284aa08",
+                "reference": "ce0e5636fae7d1e99856eb70cae4c719a284aa08",
                 "shasum": ""
             },
             "require": {
@@ -4419,7 +4419,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-18T18:27:53+00:00"
+            "time": "2026-10-25T14:32:48+00:00"
         },
         {
             "name": "nette/php-generator",
@@ -4497,16 +4497,16 @@
         },
         {
             "name": "nette/schema",
-            "version": "v1.3.7",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/schema.git",
-                "reference": "c1162897273bf9499ca57924c4688a19d82c9310"
+                "reference": "af9fa8a86bfca9b02b10346220db26e62ef942ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/schema/zipball/c1162897273bf9499ca57924c4688a19d82c9310",
-                "reference": "c1162897273bf9499ca57924c4688a19d82c9310",
+                "url": "https://api.github.com/repos/nette/schema/zipball/af9fa8a86bfca9b02b10346220db26e62ef942ec",
+                "reference": "af9fa8a86bfca9b02b10346220db26e62ef942ec",
                 "shasum": ""
             },
             "require": {
@@ -4514,16 +4514,16 @@
                 "php": "8.1 - 8.6"
             },
             "require-dev": {
-                "nette/phpstan-rules": "^1.0",
+                "nette/phpstan-rules": "^1.0.7",
                 "nette/tester": "^2.6",
                 "phpstan/extension-installer": "^1.4@stable",
-                "phpstan/phpstan": "^2.1.39@stable",
+                "phpstan/phpstan": "^2.3@stable",
                 "tracy/tracy": "^2.8"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.3-dev"
+                    "dev-master": "1.4-dev"
                 }
             },
             "autoload": {
@@ -4544,23 +4544,23 @@
                 {
                     "name": "David Grudl",
                     "homepage": "https://davidgrudl.com"
-                },
-                {
-                    "name": "Nette Community",
-                    "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "📐 Nette Schema: validating data structures against a given Schema.",
-            "homepage": "https://nette.org",
+            "description": "📐 Nette Schema: validates and normalizes data such as configuration or API input against a schema described in a few readable lines of PHP, with precise error messages.",
+            "homepage": "https://doc.nette.org/schema",
             "keywords": [
-                "config",
-                "nette"
+                "configuration",
+                "data validation",
+                "nette",
+                "normalization",
+                "schema",
+                "validation"
             ],
             "support": {
                 "issues": "https://github.com/nette/schema/issues",
-                "source": "https://github.com/nette/schema/tree/v1.3.7"
+                "source": "https://github.com/nette/schema/tree/v1.4.0"
             },
-            "time": "2026-10-20T15:46:50+00:00"
+            "time": "2026-10-22T02:12:50+00:00"
         },
         {
             "name": "nette/utils",
@@ -6680,33 +6680,37 @@
         },
         {
             "name": "spatie/laravel-responsecache",
-            "version": "7.7.2",
+            "version": "8.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-responsecache.git",
-                "reference": "039f8b9c2e2b2d838d0bfce32cfe52cf5d1cb8fc"
+                "reference": "b8861711a69f0c697898c8649d4d0def38760567"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-responsecache/zipball/039f8b9c2e2b2d838d0bfce32cfe52cf5d1cb8fc",
-                "reference": "039f8b9c2e2b2d838d0bfce32cfe52cf5d1cb8fc",
+                "url": "https://api.github.com/repos/spatie/laravel-responsecache/zipball/b8861711a69f0c697898c8649d4d0def38760567",
+                "reference": "b8861711a69f0c697898c8649d4d0def38760567",
                 "shasum": ""
             },
             "require": {
-                "illuminate/cache": "^10.0|^11.0|^12.0",
-                "illuminate/console": "^10.0|^11.0|^12.0",
-                "illuminate/container": "^10.0|^11.0|^12.0",
-                "illuminate/http": "^10.0|^11.0|^12.0",
-                "illuminate/support": "^10.0|^11.0|^12.0",
-                "nesbot/carbon": "^2.63|^3.0",
-                "php": "^8.2",
-                "spatie/laravel-package-tools": "^1.9"
+                "illuminate/cache": "^12.0|^13.0",
+                "illuminate/console": "^12.0|^13.0",
+                "illuminate/container": "^12.0|^13.0",
+                "illuminate/http": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "nesbot/carbon": "^3.0",
+                "php": "^8.4",
+                "spatie/laravel-package-tools": "^1.9",
+                "spatie/php-attribute-reader": "^1.0"
             },
             "require-dev": {
-                "laravel/framework": "^10.0|^11.0|^12.0",
-                "mockery/mockery": "^1.4",
-                "orchestra/testbench": "^8.0|^9.0|^10.0",
-                "pestphp/pest": "^2.22|^3.0"
+                "jasonmccreary/double": "^1.0",
+                "larastan/larastan": "^3.9",
+                "laravel/framework": "^12.0|^13.0",
+                "laravel/pint": "^1.13.7",
+                "mockery/mockery": "^1.6",
+                "orchestra/testbench": "^10.0|^11.0",
+                "pestphp/pest": "^4.7.8|^5.3.3"
             },
             "type": "library",
             "extra": {
@@ -6747,7 +6751,8 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/spatie/laravel-responsecache/tree/7.7.2"
+                "issues": "https://github.com/spatie/laravel-responsecache/issues",
+                "source": "https://github.com/spatie/laravel-responsecache/tree/8.6.0"
             },
             "funding": [
                 {
@@ -6759,7 +6764,65 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-28T20:22:23+00:00"
+            "time": "2026-10-19T13:47:53+00:00"
+        },
+        {
+            "name": "spatie/php-attribute-reader",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/php-attribute-reader.git",
+                "reference": "46e7484d7b51f5b22d672745c541e48c5a385404"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/php-attribute-reader/zipball/46e7484d7b51f5b22d672745c541e48c5a385404",
+                "reference": "46e7484d7b51f5b22d672745c541e48c5a385404",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "pestphp/pest": "^1.0|^2.0|^3.0|^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Attributes\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A clean API for working with PHP attributes",
+            "homepage": "https://github.com/spatie/php-attribute-reader",
+            "keywords": [
+                "attributes",
+                "php-attribute-reader",
+                "reflection",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/php-attribute-reader/issues",
+                "source": "https://github.com/spatie/php-attribute-reader/tree/1.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-02-23T09:01:55+00:00"
         },
         {
             "name": "spatie/shiki-php",
