@@ -28,7 +28,7 @@
     },
     "require-dev": {
         "austinmastlab/deployer-recipes": "^1.2.0-rc1",
-        "barryvdh/laravel-debugbar": "^3.5",
+        "barryvdh/laravel-debugbar": "^4.4",
         "barryvdh/laravel-ide-helper": "^v3.0.0",
         "deployer/deployer": "^8.0",
         "fakerphp/faker": "^1.23",
