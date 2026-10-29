@@ -24,11 +24,11 @@
         "realrashid/sweet-alert": "^8.0",
         "spatie/laravel-honeypot": "^4.6",
         "spatie/laravel-permission": "^8.3",
-        "spatie/laravel-responsecache": "^7.7"
+        "spatie/laravel-responsecache": "^8.6"
     },
     "require-dev": {
         "austinmastlab/deployer-recipes": "^1.2.0-rc1",
-        "barryvdh/laravel-debugbar": "^3.5",
+        "barryvdh/laravel-debugbar": "^4.4",
         "barryvdh/laravel-ide-helper": "^v3.0.0",
         "deployer/deployer": "^8.0",
         "fakerphp/faker": "^1.23",
