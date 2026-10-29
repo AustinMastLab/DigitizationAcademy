@@ -1121,7 +1121,7 @@ li {
 }
 
 .faq-accordion .accordion-body {
-    padding: 0 40px 40px; }
+    padding: 20px 40px 40px; }
 .faq-accordion .accordion-body p {
     color: var(--color-gray-1);
     margin-bottom: 0; }
