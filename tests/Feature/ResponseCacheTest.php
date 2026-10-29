@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Illuminate\Support\Facades\Mail;
 use Spatie\ResponseCache\Facades\ResponseCache;
 
 beforeEach(function () {
@@ -50,4 +51,21 @@ it('does not serve cached pages to livewire requests', function () {
         ->get(route('home'))
         ->assertOk()
         ->assertHeaderMissing($statusHeader);
+});
+
+it('shows the contact toast after redirecting to a cached contact page', function () {
+    Mail::fake();
+    $honeypotFields = getHoneypotFields('/contact');
+    $this->get('/contact')->assertHeader(config('responsecache.debug.cache_status_header_name'), 'HIT');
+    $this->travel(config('honeypot.amount_of_seconds') + 1)->seconds();
+
+    $this->followingRedirects()->from('/contact')->post('/contact', array_merge([
+        'name' => 'John Doe',
+        'email' => 'john@example.com',
+        'message' => 'Hello, this is a test message.',
+    ], $honeypotFields))
+        ->assertOk()
+        ->assertSee('Contact message sent successfully.');
+
+    $this->get('/contact')->assertDontSee('Contact message sent successfully.');
 });
