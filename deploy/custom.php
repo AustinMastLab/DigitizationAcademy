@@ -76,90 +76,19 @@ task('set:permissions', function () {
 
 /**
  * Publish Sweet Alert 2 assets
- * Executes the sweetalert:publish artisan command
+ * Publishes public/vendor/sweetalert/sweet-alert.js, which the Sweet Alert view loads (public/vendor isn't in git)
  */
-desc('Publish all Sweet Alert 2 assets');
-task('artisan:sweetalert:publish', artisan('sweetalert:publish'));
+desc('Publish the Sweet Alert JavaScript');
+task('artisan:alert:publish', artisan('alert:publish --assets --force'));
 
-/**
- * Reload Supervisor configuration
- * Executes reread and update commands for Supervisor
- */
-desc('Reload Supervisor configuration (config-only update)');
-task('supervisor:reload', function () {
-    run('sudo supervisorctl reread');
-    run('sudo supervisorctl update');
-});
-
-/*
- * =============================================================================
- * CI/CD ARTIFACT DEPLOYMENT - CORE FEATURE
- * =============================================================================
- */
-
-desc('Download and extract pre-built assets from GitHub Actions');
-task('deploy:ci-artifacts', function () {
-    // Environment variables automatically provided by GitHub Actions workflow
-    $githubToken = $_ENV['GITHUB_TOKEN'] ?? getenv('GITHUB_TOKEN') ?? '';
-    $githubSha = $_ENV['GITHUB_SHA'] ?? getenv('GITHUB_SHA') ?? '';
-    $githubRepo = $_ENV['GITHUB_REPO'] ?? getenv('GITHUB_REPO') ?? 'AustinMastLab/DigitizationAcademy';
-
-    // Validate required environment variables
-    if (empty($githubToken) || empty($githubSha)) {
-        throw new \Exception('GITHUB_TOKEN and GITHUB_SHA environment variables are required.');
-    }
-
-    // Artifact naming convention: digitizationacademy-{git-sha}
-    $artifactName = "digitizationacademy-{$githubSha}";
-    writeln("Downloading CI artifact: {$artifactName}");
-
-    // Step 1: Get artifact download URL from GitHub API
-    $apiUrl = "https://api.github.com/repos/{$githubRepo}/actions/artifacts";
-    $response = runLocally("curl -H 'Authorization: Bearer {$githubToken}' -H 'Accept: application/vnd.github.v3+json' '{$apiUrl}?name={$artifactName}&per_page=1'");
-    $artifacts = json_decode($response, true);
-
-    if (empty($artifacts['artifacts'])) {
-        throw new \Exception("No CI artifact found with name: {$artifactName}");
-    }
-
-    $downloadUrl = $artifacts['artifacts'][0]['archive_download_url'];
-    cd('{{release_or_current_path}}');
-
-    // Step 2: Download and extract
-    run("curl -L -H 'Authorization: Bearer {$githubToken}' -H 'Accept: application/vnd.github.v3+json' '{$downloadUrl}' -o artifact.zip");
-    run('unzip -o -q artifact.zip');
-
-    // Step 3: Biospex-style Nesting Correction
-    $nestLevelCmd = run('find . -type d -name "deployment-package" -printf "%p\\n" | wc -l');
-    $nests = (int) trim($nestLevelCmd);
-
-    if ($nests > 0) {
-        $innermost = run('find . -type d -name "deployment-package" | sort -r | head -1');
-        $innermost = trim($innermost);
-        if (! empty($innermost)) {
-            run("rsync -av '{$innermost}/' ./");
-            run('find . -type d -name "deployment-package" -exec rm -rf {} +');
-        }
-    }
-
-    run('rm -f artifact.zip');
-    writeln('✅ CI artifacts deployed successfully (Flat structure ensured)');
-});
+// deploy:ci-artifacts, deploy:verify-structure and supervisor:reload come from
+// deployer-recipes/recipe/ci-artifacts.php (required in deploy.php).
 
 /*
  * =============================================================================
  * ENVIRONMENT MANAGEMENT
  * =============================================================================
  */
-
-desc('Verify flat deployment structure');
-task('deploy:verify-structure', function () {
-    $nestCheck = run('find {{release_path}} -type d -name "deployment-package" | wc -l');
-    if ((int) trim($nestCheck) > 0) {
-        throw new \Exception("Nesting detected post-deploy: {$nestCheck} dirs. Check CI artifact.");
-    }
-    writeln('✅ Deployment structure verified: flat and clean');
-});
 
 /**
  * Clear package discovery cache before running composer operations

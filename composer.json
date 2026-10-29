@@ -20,20 +20,20 @@
         "laravel/framework": "^12.0",
         "laravel/horizon": "^5.48",
         "laravel/sanctum": "^v4.0.0",
-        "laravel/tinker": "^2.7",
-        "realrashid/sweet-alert": "^v7.3.0",
+        "laravel/tinker": "^3.0",
+        "realrashid/sweet-alert": "^8.0",
         "spatie/laravel-honeypot": "^4.6",
-        "spatie/laravel-permission": "^6.0",
-        "spatie/laravel-responsecache": "^7.7"
+        "spatie/laravel-permission": "^8.3",
+        "spatie/laravel-responsecache": "^8.6"
     },
     "require-dev": {
-        "austinmastlab/deployer-recipes": "^1.0.1",
-        "barryvdh/laravel-debugbar": "^3.5",
+        "austinmastlab/deployer-recipes": "^1.2.0-rc1",
+        "barryvdh/laravel-debugbar": "^4.4",
         "barryvdh/laravel-ide-helper": "^v3.0.0",
         "deployer/deployer": "^8.0",
         "fakerphp/faker": "^1.23",
         "kitloong/laravel-migrations-generator": "^v7.0.1",
-        "laravel/boost": "^1.8",
+        "laravel/boost": "^2.10",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.24",
         "mockery/mockery": "^1.6",
@@ -61,7 +61,7 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
-          "@php artisan sweetalert:publish --ansi"
+            "@php artisan alert:publish --assets --force --ansi"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",

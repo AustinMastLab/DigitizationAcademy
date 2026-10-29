@@ -4,11 +4,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | CDN LINK
+    | Default Alert Type
     |--------------------------------------------------------------------------
-    | By default SweetAlert2 use its local sweetalert.all.js
-    | file.
-    | However, you can use its cdn if you want.
+    |
+    | This value determines the default alert type when none is specified.
+    |
+    */
+
+    'default' => env('SWEET_ALERT_DEFAULT', 'alert'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | CDN Link
+    |--------------------------------------------------------------------------
+    |
+    | By default, SweetAlert2 uses its local sweetalert2.min.js file.
+    | However, you can use a CDN if you prefer.
     |
     */
 
@@ -16,197 +27,217 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Always load the sweetalert.all.js
+    | JavaScript Loading Control
     |--------------------------------------------------------------------------
-    | There might be situations where you will always want the sweet alert
-    | js package to be there for you. (for eg. you might use it heavily to
-    | show notifications or you might want to use the native js) then this
-    | might be handy.
+    |
+    | always_load_js: Always include the SweetAlert2 JS on every page.
+    | never_load_js: Never include the JS (handle it yourself with Mix/Vite).
+    |
+    | alwaysLoadJs = true  & neverLoadJs = true  => JS will NOT be loaded
+    | alwaysLoadJs = true  & neverLoadJs = false => JS will be loaded
+    | alwaysLoadJs = false & neverLoadJs = false => JS loaded only when alert is set
     |
     */
 
-    'alwaysLoadJS' => env('SWEET_ALERT_ALWAYS_LOAD_JS', false),
+    'always_load_js' => env('SWEET_ALERT_ALWAYS_LOAD_JS', false),
+    'never_load_js' => env('SWEET_ALERT_NEVER_LOAD_JS', false),
 
     /*
     |--------------------------------------------------------------------------
-    | Never load the sweetalert.all.js
-    |--------------------------------------------------------------------------
-    | If you want to handle the sweet alert js package by yourself
-    | (for eg. you might want to use laravel mix) then this can be
-    | handy.
-    | If you set always load js to true & never load js to false,
-    | it's going to prioritize the never load js.
-    |
-    | alwaysLoadJs = true  & neverLoadJs = true  => js will not be loaded
-    | alwaysLoadJs = true  & neverLoadJs = false => js will be loaded
-    | alwaysLoadJs = false & neverLoadJs = false => js will be loaded when
-    | you set alert/toast by using the facade/helper functions.
-    */
-
-    'neverLoadJS' => env('SWEET_ALERT_NEVER_LOAD_JS', false),
-
-    /*
-    |--------------------------------------------------------------------------
-    | AutoClose Timer
+    | Default Modal Settings
     |--------------------------------------------------------------------------
     |
-    | This is for the all Modal windows.
-    | For specific modal just use the autoClose() helper method.
+    | These values are used as defaults for all modal windows.
+    | Override them per-alert using the fluent API methods.
     |
     */
 
     'timer' => env('SWEET_ALERT_TIMER', 5000),
 
     /*
-    |--------------------------------------------------------------------------
-    | Width
-    |--------------------------------------------------------------------------
-    |
-    | Modal window width, including paddings (box-sizing: border-box).
-    | Can be in px or %.
-    | The default width is 32rem.
-    | This is for the all Modal windows.
-    | for particular modal just use the width() helper method.
+    | Width, padding and background are sent to SweetAlert2 only when you set
+    | them. SweetAlert2 turns each one into an inline style on the popup, and an
+    | inline style beats every stylesheet — so a hard-coded background here
+    | would override the theme you picked and every alert would stay white.
+    | Leave them null and the active theme's own CSS decides.
     */
-
-    'width' => env('SWEET_ALERT_WIDTH', '32rem'),
+    'width' => env('SWEET_ALERT_WIDTH'),
+    'padding' => env('SWEET_ALERT_PADDING'),
+    'background' => env('SWEET_ALERT_BACKGROUND'),
+    'show_confirm_button' => env('SWEET_ALERT_SHOW_CONFIRM_BUTTON', true),
+    'show_close_button' => env('SWEET_ALERT_SHOW_CLOSE_BUTTON', false),
 
     /*
     |--------------------------------------------------------------------------
-    | Height Auto
+    | Button Text
     |--------------------------------------------------------------------------
-    | By default, SweetAlert2 sets html's and body's CSS height to auto !important.
-    | If this behavior isn't compatible with your project's layout,
-    | set heightAuto to false.
+    |
+    | Default text for the modal buttons. Translations will be handled
+    | by Laravel at runtime.
     |
     */
 
-    'height_auto' => env('SWEET_ALERT_HEIGHT_AUTO', true),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Padding
-    |--------------------------------------------------------------------------
-    |
-    | Modal window padding.
-    | Can be in px or %.
-    | The default padding is 1.25rem.
-    | This is for the all Modal windows.
-    | for particular modal just use the padding() helper method.
-    */
-
-    'padding' => env('SWEET_ALERT_PADDING', '1.25rem'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Animation
-    |--------------------------------------------------------------------------
-    | Custom animation with [Animate.css](https://daneden.github.io/animate.css/)
-    | If set to false, modal CSS animation will be use default ones.
-    | For specific modal just use the animation() helper method.
-    |
-    */
-
-    'animation' => [
-        'enable' => env('SWEET_ALERT_ANIMATION_ENABLE', false),
+    'button_text' => [
+        'confirm' => env('SWEET_ALERT_CONFIRM_BUTTON_TEXT', 'OK'),
+        'cancel' => env('SWEET_ALERT_CANCEL_BUTTON_TEXT', 'Cancel'),
+        'deny' => env('SWEET_ALERT_DENY_BUTTON_TEXT', 'Deny'),
     ],
 
-    'animatecss' => env('SWEET_ALERT_ANIMATECSS', 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css'),
-
     /*
     |--------------------------------------------------------------------------
-    | ShowConfirmButton
+    | Toast Settings
     |--------------------------------------------------------------------------
-    | If set to false, a "Confirm"-button will not be shown.
-    | It can be useful when you're using custom HTML description.
-    | This is for the all Modal windows.
-    | For specific modal just use the showConfirmButton() helper method.
+    |
+    | Default configuration for toast notifications.
     |
     */
 
-    'show_confirm_button' => env('SWEET_ALERT_CONFIRM_BUTTON', true),
+    'toast' => [
+        'position' => env('SWEET_ALERT_TOAST_POSITION', 'top-end'),
+        'auto_close' => env('SWEET_ALERT_TOAST_AUTO_CLOSE', 5000),
+        'show_close_button' => env('SWEET_ALERT_TOAST_CLOSE_BUTTON', true),
+        'show_confirm_button' => false,
+        'timer_progress_bar' => env('SWEET_ALERT_TOAST_PROGRESS_BAR', true),
+    ],
 
     /*
     |--------------------------------------------------------------------------
-    | ShowCloseButton
+    | Middleware Settings
     |--------------------------------------------------------------------------
-    | If set to true, a "Close"-button will be shown,
-    | which the user can click on to dismiss the modal.
-    | This is for the all Modal windows.
-    | For specific modal just use the showCloseButton() helper method.
     |
-    */
-
-    'show_close_button' => env('SWEET_ALERT_CLOSE_BUTTON', false),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Toast position
-    |--------------------------------------------------------------------------
-    | Modal window or toast position, can be 'top',
-    | 'top-start', 'top-end', 'center', 'center-start',
-    | 'center-end', 'bottom', 'bottom-start', or 'bottom-end'.
-    | For specific modal just use the position() helper method.
-    |
-    */
-
-    'toast_position' => env('SWEET_ALERT_TOAST_POSITION', 'top-end'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Progress Bar
-    |--------------------------------------------------------------------------
-    | If set to true, a progress bar at the bottom of a popup will be shown.
-    | It can be useful with toasts.
-    |
-    */
-
-    'timer_progress_bar' => env('SWEET_ALERT_TIMER_PROGRESS_BAR', false),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Middleware
-    |--------------------------------------------------------------------------
-    | Modal window or toast, config for the Middleware
+    | Configuration for the ToSweetAlert middleware behavior.
     |
     */
 
     'middleware' => [
-
-        'autoClose' => env('SWEET_ALERT_MIDDLEWARE_AUTO_CLOSE', true),
-
+        'auto_display_errors' => env('SWEET_ALERT_AUTO_DISPLAY_ERRORS', true),
         'toast_position' => env('SWEET_ALERT_MIDDLEWARE_TOAST_POSITION', 'top'),
-
+        'auto_close' => env('SWEET_ALERT_MIDDLEWARE_AUTO_CLOSE', true),
+        'timer' => env('SWEET_ALERT_MIDDLEWARE_TIMER', 5000),
         'toast_close_button' => env('SWEET_ALERT_MIDDLEWARE_TOAST_CLOSE_BUTTON', true),
-
-        'timer' => env('SWEET_ALERT_MIDDLEWARE_ALERT_CLOSE_TIME', 5000),
-
-        'auto_display_error_messages' => env('SWEET_ALERT_AUTO_DISPLAY_ERROR_MESSAGES', true),
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Custom Class
+    | Confirm Dialog Settings
     |--------------------------------------------------------------------------
-    | A custom CSS class for the modal:
+    |
+    | Default configuration for general confirm dialogs, and for the guarded
+    | links and forms marked with data-confirm.
+    |
+    | `auto` emits the small listener that makes data-confirm and
+    | data-confirm-delete work on every page. Turn it off if you would rather
+    | wire the confirmation up yourself.
     |
     */
 
-    'customClass' => [
+    'confirm' => [
+        'auto' => env('SWEET_ALERT_AUTO_CONFIRM', true),
+        'icon' => 'question',
+        'title' => 'Are you sure?',
+        'text' => '',
+        'confirm_button_text' => 'Yes',
+        'confirm_button_color' => '#3085d6',
+        'cancel_button_text' => 'Cancel',
+        'show_cancel_button' => true,
+        'show_close_button' => false,
+    ],
 
-        'container' => env('SWEET_ALERT_CONTAINER_CLASS'),
-        'popup' => env('SWEET_ALERT_POPUP_CLASS'),
-        'header' => env('SWEET_ALERT_HEADER_CLASS'),
-        'title' => env('SWEET_ALERT_TITLE_CLASS'),
-        'closeButton' => env('SWEET_ALERT_CLOSE_BUTTON_CLASS'),
-        'icon' => env('SWEET_ALERT_ICON_CLASS'),
-        'image' => env('SWEET_ALERT_IMAGE_CLASS'),
-        'content' => env('SWEET_ALERT_CONTENT_CLASS'),
-        'input' => env('SWEET_ALERT_INPUT_CLASS'),
-        'actions' => env('SWEET_ALERT_ACTIONS_CLASS'),
-        'confirmButton' => env('SWEET_ALERT_CONFIRM_BUTTON_CLASS'),
-        'cancelButton' => env('SWEET_ALERT_CANCEL_BUTTON_CLASS'),
-        'footer' => env('SWEET_ALERT_FOOTER_CLASS'),
+    /*
+    |--------------------------------------------------------------------------
+    | Confirm Delete Settings
+    |--------------------------------------------------------------------------
+    |
+    | Default configuration for the confirmDelete() dialog.
+    |
+    */
+
+    'confirm_delete' => [
+        'icon' => 'warning',
+        'title' => 'Are you sure?',
+        'text' => 'This cannot be undone.',
+        'confirm_button_text' => 'Yes, delete it!',
+        'confirm_button_color' => '#d33',
+        'cancel_button_text' => 'Cancel',
+        'show_close_button' => false,
+        'show_cancel_button' => true,
+        'show_loader_on_confirm' => true,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Animation Settings
+    |--------------------------------------------------------------------------
+    |
+    | Custom animation using Animate.css.
+    |
+    */
+
+    'animation' => [
+        'enabled' => env('SWEET_ALERT_ANIMATION_ENABLE', false),
+        'animatecss' => env('SWEET_ALERT_ANIMATECSS'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Theme
+    |--------------------------------------------------------------------------
+    |
+    | SweetAlert2 theme. Set to 'default' for the standard theme,
+    | or use any theme from @sweetalert2/theme-* package.
+    |
+    */
+
+    'theme' => env('SWEET_ALERT_THEME', 'light'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Presets
+    |--------------------------------------------------------------------------
+    |
+    | Named presets that can be applied with ->preset('name').
+    | Each preset is an array of SweetAlert2 config options that
+    | are merged onto the current builder configuration.
+    |
+    | Example:
+    |   Alert::preset('danger')->title('Oops!')->flash();
+    |
+    */
+
+    'presets' => [
+        // 'danger' => [
+        //     'icon' => 'error',
+        //     'confirmButtonColor' => '#d33',
+        //     'showCancelButton' => true,
+        // ],
+        // 'success-toast' => [
+        //     'toast' => true,
+        //     'position' => 'top-end',
+        //     'icon' => 'success',
+        //     'timer' => 3000,
+        //     'timerProgressBar' => true,
+        //     'showConfirmButton' => false,
+        // ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | JavaScript Source Settings
+    |--------------------------------------------------------------------------
+    |
+    | source: 'cdn' (default), 'npm' (set never_load_js=true and manage Swal
+    |          yourself via npm), 'manual' (full control, nothing injected).
+    | version: pinned SweetAlert2 version used when source='cdn'.
+    | cdn_provider: 'jsdelivr' (default), 'unpkg', 'cdnjs', 'custom'.
+    | custom_cdn_js: only used when cdn_provider='custom'.
+    |
+    */
+
+    'js' => [
+        'source' => env('SWEET_ALERT_JS_SOURCE', 'cdn'),
+        'version' => env('SWEET_ALERT_VERSION', '11'),
+        'cdn_provider' => env('SWEET_ALERT_CDN_PROVIDER', 'jsdelivr'),
+        'custom_cdn_js' => env('SWEET_ALERT_CDN_JS'),
     ],
 
 ];

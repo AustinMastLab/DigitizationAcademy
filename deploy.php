@@ -34,10 +34,14 @@ namespace Deployer;
 
 require 'recipe/laravel.php';
 require __DIR__.'/vendor/austinmastlab/deployer-recipes/recipe/ssm-env.php';
+require __DIR__.'/vendor/austinmastlab/deployer-recipes/recipe/ci-artifacts.php';
 require 'deploy/custom.php';
 
 // .env is generated from SSM /digitizationacademy/{environment} by env:ssm (austinmastlab/deployer-recipes).
 set('ssm_app', 'digitizationacademy');
+
+// supervisor:reload (deployer-recipes) updates only this site's Supervisor group
+set('supervisor_groups', ['da']);
 
 // Deployment Configuration
 set('repository', 'https://github.com/AustinMastLab/DigitizationAcademy.git');
@@ -125,7 +129,7 @@ task('deploy', [
     'artisan:storage:link',    // Create symbolic link for storage directory
     'artisan:package:discover', // Run package discovery
     'artisan:horizon:publish', // Publish Laravel Horizon assets
-    'artisan:sweetalert:publish', // Publish Sweet Alert assets
+    'artisan:alert:publish', // Publish the Sweet Alert JavaScript the alert view loads
     'artisan:filament:assets',
     'artisan:app:deploy-files', // Custom app deployment files
 
