@@ -141,7 +141,7 @@
                             <div class="col-10 m-auto">
                                 <div class="row course-resources">
                                     <div class="col-md-6 ps-5 m-auto">
-                                        <img src="{{ asset('images/logo/dk-logo.svg') }}"
+                                        <img src="{{ Vite::asset('resources/images/logo/dk-logo.svg') }}"
                                              alt="Digitization Knowledgebase Logo"
                                              class="img-fluid d-block"/>
                                         <p class="text-start mt-5">

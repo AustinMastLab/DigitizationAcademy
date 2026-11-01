@@ -1,8 +1,9 @@
 <?php
 
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
+use App\Notifications\VerifyEmailQueued;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use Laravel\Fortify\Features;
@@ -37,7 +38,7 @@ it('can verify email', function () {
     Event::assertDispatched(Verified::class);
 
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
-    $response->assertRedirect(RouteServiceProvider::HOME.'?verified=1');
+    $response->assertRedirect('/admin?verified=1');
 })->skip(function () {
     return ! Features::enabled(Features::emailVerification());
 }, 'Email verification not enabled.');
@@ -72,7 +73,7 @@ it('can resend email verification notification', function () {
 
     $response = $this->actingAs($user)->from('/email/verify')->post('/email/verification-notification', $honeypotFields);
 
-    Notification::assertSentTo($user, App\Notifications\VerifyEmailQueued::class);
+    Notification::assertSentTo($user, VerifyEmailQueued::class);
     $response->assertRedirect('/email/verify');
 })->skip(function () {
     return ! Features::enabled(Features::emailVerification());
@@ -92,7 +93,7 @@ it('cannot resend email verification notification if honeypot is tripped', funct
 
     $response = $this->actingAs($user)->post('/email/verification-notification', $honeypotFields);
 
-    Notification::assertNotSentTo($user, Illuminate\Auth\Notifications\VerifyEmail::class);
+    Notification::assertNotSentTo($user, VerifyEmail::class);
     $response->assertSessionHasErrors(['contact']);
 })->skip(function () {
     return ! Features::enabled(Features::emailVerification());

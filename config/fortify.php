@@ -18,7 +18,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-use App\Providers\RouteServiceProvider;
 use Laravel\Fortify\Features;
 use Spatie\Honeypot\ProtectAgainstSpam;
 
@@ -80,7 +79,7 @@ return [
     |
     */
 
-    'home' => RouteServiceProvider::HOME,
+    'home' => '/admin',
 
     /*
     |--------------------------------------------------------------------------

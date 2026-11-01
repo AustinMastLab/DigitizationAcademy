@@ -18,10 +18,12 @@
 
 import './bootstrap';
 import './vendor/bootstrap.bundle.min';
-import './vendor/imagesloaded.pkgd.min';
-import './vendor/isotope.pkgd.min.js';
 import './vendor/jquery.nav';
 import './vendor/jquery-appear';
 import './vendor/tilt';
 import './main';
 import './google-translate';
+
+// Let Vite version the images Blade references with Vite::asset().
+// Eager ?url imports, because Vite 8 drops an unused lazy glob from the build.
+import.meta.glob('../images/**', { eager: true, query: '?url', import: 'default' });

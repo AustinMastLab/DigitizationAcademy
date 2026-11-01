@@ -5,7 +5,7 @@
             <div class="header-navbar">
                 <div class="header-logo">
                     <a href="{{ route('home') }}">
-                        <img class="light-version-logo" src="{{ mix('images/logo/logo.svg') }}" alt="logo" style="width:170px;">
+                        <img class="light-version-logo" src="{{ Vite::asset('resources/images/logo/logo.svg') }}" alt="logo" style="width:170px;">
                     </a>
                 </div>
 
@@ -15,7 +15,7 @@
                             <div class="mobile-nav-header">
                                 <div class="mobile-nav-logo">
                                     <a href="{{ route('home') }}" aria-label="Logo links to home page" role="button"><img
-                                                class="light-mode" src="{{ mix('images/logo/logo.svg') }}" style="width:150px"
+                                                class="light-mode" src="{{ Vite::asset('resources/images/logo/logo.svg') }}" style="width:150px"
                                                 alt="Digitization Academy home"></a>
                                 </div>
 

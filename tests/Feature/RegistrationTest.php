@@ -1,7 +1,7 @@
 <?php
 
-use App\Providers\RouteServiceProvider;
 use Laravel\Fortify\Features;
+use Spatie\Permission\Models\Role;
 
 it('registration screen can be rendered', function () {
     $response = $this->get('/register');
@@ -20,7 +20,7 @@ it('cannot rendered registration screen if support is disabled', function () {
 }, 'Registration support is enabled.');
 
 it('can register new users', function () {
-    \Spatie\Permission\Models\Role::create(['name' => 'Staff']);
+    Role::create(['name' => 'Staff']);
 
     $honeypotFields = getHoneypotFields('/register');
 
@@ -34,7 +34,7 @@ it('can register new users', function () {
     ], $honeypotFields));
 
     $this->assertAuthenticated();
-    $response->assertRedirect(RouteServiceProvider::HOME);
+    $response->assertRedirect('/admin');
 })->skip(function () {
     return ! Features::enabled(Features::registration());
 }, 'Registration support is not enabled.');
