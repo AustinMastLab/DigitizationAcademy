@@ -58,18 +58,14 @@ set('cleanup_use_sudo', true);
 // Shared Files (persisted across deployments)
 set('shared_files', [
     '.env',                        // Environment configuration
-    'public/mix-manifest.json',    // Laravel Mix manifest for asset versioning
 ]);
 
 // Shared Directories (persisted across deployments)
+// Vite's public/build (with the site's images) comes with each release's CI artifact, so it isn't
+// shared, and Filament republishes public/css, public/js and public/fonts on every deploy.
 set('shared_dirs', [
     'storage',          // Laravel storage (logs, cache, uploads)
-    'public/css',       // Compiled CSS files
-    'public/js',        // Compiled JavaScript files
-    'public/fonts',     // Web fonts
-    'public/images',    // Static images
-    'public/svg',       // SVG assets
-    'public/vendor',    // Vendor assets (Filament, etc.)
+    'public/vendor',    // Vendor assets (Horizon, Sweet Alert)
 ]);
 
 // Files/Directories to Remove After Deployment

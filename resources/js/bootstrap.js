@@ -17,12 +17,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import _ from 'lodash';
-window._ = _;
-
 // Make sure jQuery is available globally
 import $ from 'jquery';
 window.$ = window.jQuery = $;
+
+// Isotope and imagesLoaded as jQuery plugins: $(...).isotope() and $(...).imagesLoaded()
+import jQueryBridget from 'jquery-bridget';
+import Isotope from 'isotope-layout';
+import imagesLoaded from 'imagesloaded';
+
+jQueryBridget('isotope', Isotope, $);
+imagesLoaded.makeJQueryPlugin($);
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -51,10 +56,10 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
-//     key: import.meta.env.MIX_PUSHER_APP_KEY,
-//     wsHost: import.meta.env.MIX_PUSHER_HOST ?? `ws-${import.meta.env.MIX_PUSHER_APP_CLUSTER}.pusher.com`,
-//     wsPort: import.meta.env.MIX_PUSHER_PORT ?? 80,
-//     wssPort: import.meta.env.MIX_PUSHER_PORT ?? 443,
-//     forceTLS: (import.meta.env.MIX_PUSHER_SCHEME ?? 'https') === 'https',
+//     key: import.meta.env.VITE_PUSHER_APP_KEY,
+//     wsHost: import.meta.env.VITE_PUSHER_HOST ?? `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
+//     wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
+//     wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
+//     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
 //     enabledTransports: ['ws', 'wss'],
 // });

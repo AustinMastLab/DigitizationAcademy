@@ -10,11 +10,11 @@
             <!-- graphic shapes -->
             <ul class="list-unstyled shape-group-pages">
                 <li class="shape shape-1">
-                    <img class="paralax-image" src="{{ asset('images/banner/salmon-pic.png') }}" alt="Salmon Specimen Image">
+                    <img class="paralax-image" src="{{ Vite::asset('resources/images/banner/salmon-pic.png') }}" alt="Salmon Specimen Image">
                 </li>
                 <li class="shape shape-7">
                     <img
-                            src="{{ asset('images/others/bubble-salmon.png') }}"
+                            src="{{ Vite::asset('resources/images/others/bubble-salmon.png') }}"
                             alt="Graphic of purple bubble"
                             style="opacity: 0.9;"
                     >
@@ -26,7 +26,7 @@
     <!-- shape groups -->
     <ul class="shape-group-6 list-unstyled">
         <li class="shape shape-1">
-            <img src="{{ asset('images/logo/watermarkApr2025.svg') }}" alt="Bubble">
+            <img src="{{ Vite::asset('resources/images/logo/watermarkApr2025.svg') }}" alt="Bubble">
         </li>
     </ul>
 

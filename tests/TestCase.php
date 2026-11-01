@@ -12,7 +12,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        // CI runs the tests before assets are built, so there's no mix-manifest.json
-        $this->withoutMix();
+        // CI runs the tests before assets are built, so there's no Vite manifest
+        $this->withoutVite();
     }
 }

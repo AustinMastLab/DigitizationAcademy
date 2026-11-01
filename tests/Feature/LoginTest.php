@@ -19,7 +19,6 @@
  */
 
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
 
 it('login screen can be rendered', function () {
     $response = $this->get('/login');
@@ -39,7 +38,7 @@ it('can login with honeypot', function () {
     ], $honeypotFields));
 
     $this->assertAuthenticatedAs($user);
-    $response->assertRedirect(RouteServiceProvider::HOME);
+    $response->assertRedirect('/admin');
 });
 
 it('cannot login if honeypot is tripped', function () {

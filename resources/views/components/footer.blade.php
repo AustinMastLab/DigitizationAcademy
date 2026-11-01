@@ -5,22 +5,22 @@
                 <!-- sponsor logos -->
                 <ul class="list-unstyled">
                     <li><a href="https://digitizationacademy.org" target="_blank">
-                            <img src="{{ asset('images/logo/logo.svg') }}"
+                            <img src="{{ Vite::asset('resources/images/logo/logo.svg') }}"
                                  alt="Digitization Academy"
                                  width="175px" style="filter:grayscale(99%);"></a></li>
                     <li><a href="https://www.idigbio.org/" target="_blank">
                             <img
-                                    src="{{ asset('images/logo/logo-idigbio.svg') }}"
+                                    src="{{ Vite::asset('resources/images/logo/logo-idigbio.svg') }}"
                                     alt="IDigBio"
                                     style="z-index:1; display:block; position: relative;"
                                     width="175px"></a></li>
                     <li><a href="https://idiginfo.org/" target="_blank">
-                            <img src="{{ asset('images/logo/idiginfo.png') }}"
+                            <img src="{{ Vite::asset('resources/images/logo/idiginfo.png') }}"
                                  style="z-index:1; display:block; position: relative;"
                                  alt="iDigInfo"
                                  width="175px"></a></li>
                     <li><a href="https://www.fsu.edu" target="_blank">
-                            <img src="{{ asset('images/logo/fsu-logo.svg') }}" alt="FSU"
+                            <img src="{{ Vite::asset('resources/images/logo/fsu-logo.svg') }}" alt="FSU"
                                  style="z-index:1; display:block; position: relative;"
                                  width="100px"></a>
                     </li>

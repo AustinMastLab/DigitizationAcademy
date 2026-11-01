@@ -2,7 +2,7 @@
     <!-- shape groups -->
     <ul class="shape-group-6 list-unstyled">
         <li class="shape shape-1">
-            <img src="{{ asset('images/logo/watermarkApr2025.svg') }}" alt="Bubble">
+            <img src="{{ Vite::asset('resources/images/logo/watermarkApr2025.svg') }}" alt="Bubble">
         </li>
     </ul>
     <!--              Hero Banner            -->
@@ -24,13 +24,13 @@
         <!-- graphic shapes -->
         <ul class="list-unstyled shape-group-home">
             <li class="shape shape-1">
-                <img src="{{ asset('images/banner/banner-shape-1.png') }}" alt="Image of a scanned butterfly specimen.">
+                <img src="{{ Vite::asset('resources/images/banner/banner-shape-1.png') }}" alt="Image of a scanned butterfly specimen.">
             </li>
             <li class="shape shape-2">
-                <img src="{{ asset('images/banner/banner-shape-2.png') }}" alt="Graphical design element of a curved line">
+                <img src="{{ Vite::asset('resources/images/banner/banner-shape-2.png') }}" alt="Graphical design element of a curved line">
             </li>
             <li class="shape shape-7" style="opacity:.7">
-                <img src="{{ asset('images/others/bubble-26.png') }}" alt="Graphical design element of a curved line">
+                <img src="{{ Vite::asset('resources/images/others/bubble-26.png') }}" alt="Graphical design element of a curved line">
             </li>
         </ul>
     </section>
@@ -72,7 +72,7 @@
                                             data-bs-toggle="collapse"
                                             data-bs-target="#faq1" aria-expanded="false" aria-controls="faq1">
                                         <span class="acc_number"><img
-                                                    src="{{ asset('images/logo/leaf-left.svg') }}"
+                                                    src="{{ Vite::asset('resources/images/logo/leaf-left.svg') }}"
                                                     width="100px" style="margin-top: -25px;" alt="IDig Bio Leaves"> </span>
                                         <h6>Our systematic overview builds the foundation.</h6>
                                     </button>
@@ -91,7 +91,7 @@
                                             data-bs-toggle="collapse"
                                             data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
                                         <span class="acc_number"><img
-                                                    src="{{ asset('images/logo/leaf-yellow-orange-center.png') }}"
+                                                    src="{{ Vite::asset('resources/images/logo/leaf-yellow-orange-center.png') }}"
                                                     width="100px"
                                                     style="margin-top: -25px;" alt="IDig Bio Leaf"> </span>
                                         <h6>Your experience provides the nuance and motivation.</h6>
@@ -110,7 +110,7 @@
                                             data-bs-toggle="collapse"
                                             data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
                                         <span class="acc_number"><img
-                                                    src="{{ asset('images/logo/leaf-right.svg') }}"
+                                                    src="{{ Vite::asset('resources/images/logo/leaf-right.svg') }}"
                                                     width="100px" style="margin-top: -25px;" alt="IDig Bio Leaf"> </span>
                                         <h6>And an expert panel identifies the leading edge of the possible.</h6>
                                     </button>
@@ -142,7 +142,7 @@
                         Digitization Academy. The Digitization Academy offerings from iDigBio represent a standardized
                         strategy for delivery of a subset of iDigBio’s training options to ensure that we have all
                         high-value topics covered for you in complementary ways.</p>
-                    <img src="{{ asset('images/others/idig-bio-leaves.svg') }}" id="idigLeaf" alt="IDig Bio Leaf">
+                    <img src="{{ Vite::asset('resources/images/others/idig-bio-leaves.svg') }}" id="idigLeaf" alt="IDig Bio Leaf">
                 </div>
             </div>
         </div>

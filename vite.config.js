@@ -1,4 +1,3 @@
-<?php
 /*
  * Copyright (c) 2022. Digitization Academy
  * idigacademy@gmail.com
@@ -17,18 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace App\Http\Middleware;
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
 
-use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance as Middleware;
-
-class PreventRequestsDuringMaintenance extends Middleware
-{
-    /**
-     * The URIs that should be reachable while maintenance mode is enabled.
-     *
-     * @var array<int, string>
-     */
-    protected $except = [
-        //
-    ];
-}
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: ['resources/css/app.css', 'resources/js/app.js'],
+            refresh: true,
+        }),
+    ],
+});
