@@ -2,7 +2,7 @@
     <!-- shape groups -->
     <ul class="shape-group-6 list-unstyled">
         <li class="shape shape-1">
-            <img src="{{ asset('images/logo/watermarkApr2025.svg') }}" alt="Bubble">
+            <img src="{{ Vite::asset('resources/images/logo/watermarkApr2025.svg') }}" alt="Bubble">
         </li>
     </ul>
     <!-- Contact  Area Start     =-->

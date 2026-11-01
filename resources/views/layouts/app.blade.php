@@ -10,9 +10,9 @@
 
     <title>{{ $title ?? config('app.name', 'FSU Digitization Academy') }}</title>
 
-    <link rel="shortcut icon" type="image/x-icon" href="{{ mix('images/logo/favicon.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ Vite::asset('resources/images/logo/favicon.png') }}">
 
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XBKJG01XTP"></script>
@@ -59,7 +59,6 @@
         <x-aside-menu />
     @endauth
 @sweetAlert
-<script src="{{ mix('js/app.js') }}"></script>
 @stack('scripts')
 </body>
 </html>

@@ -9,12 +9,12 @@
             <!-- graphic shapes -->
             <ul class="list-unstyled shape-group-pages">
                 <li class="shape shape-1">
-                    <img class="paralax-image" src="{{ asset('images/banner/egg-pic.png') }}"
+                    <img class="paralax-image" src="{{ Vite::asset('resources/images/banner/egg-pic.png') }}"
                          alt="Egg Specimen Image">
                 </li>
                 <li class="shape shape-7">
                     <!-- calendar-bubble.png -->
-                    <img src="{{ asset('images/others/bubble-purple.png') }}"
+                    <img src="{{ Vite::asset('resources/images/others/bubble-purple.png') }}"
                          alt="Graphic of purple bubble"
                          style="opacity: 0.9;">
                 </li>
@@ -26,7 +26,7 @@
     <!-- shape groups -->
     <ul class="shape-group-6 list-unstyled">
         <li class="shape shape-1">
-            <img src="{{ asset('images/logo/watermarkApr2025.svg') }}" alt="Bubble">
+            <img src="{{ Vite::asset('resources/images/logo/watermarkApr2025.svg') }}" alt="Bubble">
         </li>
     </ul>
     <!-- Calendar Start -->

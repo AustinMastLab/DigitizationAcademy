@@ -1,6 +1,5 @@
 <?php
 
-
 /*
  * Copyright (c) 2022. Digitization Academy
  * idigacademy@gmail.com
@@ -28,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
+| routes are loaded by bootstrap/app.php within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */

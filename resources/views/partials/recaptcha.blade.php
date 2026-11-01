@@ -16,7 +16,8 @@
     <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
 
     <script type="text/javascript">
-        $(function () {
+        // Vite loads jQuery in a deferred module script, which has run by DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function () {
             // Avoid binding twice if the partial is included multiple times
             $('.recaptcha').off('submit.recaptcha').on('submit.recaptcha', function (event) {
                 event.preventDefault();
